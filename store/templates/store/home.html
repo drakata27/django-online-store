@@ -1,11 +1,17 @@
 {% extends 'store/base.html' %}
 {% load static %}
+
 {% block content %}
+<script src="{% static 'js/features.js' %}"></script>
 <style>
     #hero {
     background-image: url("{% static 'images/hero4.png' %}");
   }
+  #hero button {
+    background-image: url("{% static 'images/button.png' %}");
+  }
 </style>
+
 <!-- Hero Section -->
 <section id="hero">
     <h4>Trade-in-offer</h4>
@@ -15,9 +21,9 @@
     <button>Shop Now</button>
   </section>
   <!-- end -->
-
 <!-- Features -->
+<section id="feature" class="section-p1">
 
+</section>
 <!-- end -->
-
 {% endblock %}
