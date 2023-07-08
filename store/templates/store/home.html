@@ -35,7 +35,7 @@
   <!-- Product Container -->
   <div class="pro-container">
     <!-- product -->
-    {% for product in products %}
+    {% for product in featured_products %}
       <div class="pro">
         <img src="{{ product.imageURL }}" alt="" />
         <div class="des">
@@ -67,14 +67,17 @@
       <p>Summer Collection New Modern Design</p>
       <div class="pro-container">
         <!-- product -->
-        <div class="pro">
-          <img src="img/products/f1.jpg" alt="" />
-          <div class="des">
-            <span>adidas</span>
-            <h5>Cartoon Astronaut T-Shirts</h5>
+        {% for product in new_products %}
+          <div class="pro">
+            <img src="{{ product.imageURL }}" alt="" />
+            <div class="des">
+              <span>{{product.brand}}</span>
+              <h5>{{product.name}}</h5>
+              <h4>£{{ product.price|floatformat:2 }}</h4>
+            </div>
+            <a href="#"><i class="fal fa-shopping-cart cart"></i></a>
           </div>
-          <a href="#"><i class="fal fa-shopping-cart cart"></i></a>
-        </div>
+        {% endfor %}
         <!-- product end -->
       </div>
 </section>
