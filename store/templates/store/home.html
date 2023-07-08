@@ -24,4 +24,27 @@
 <!-- Features -->
 <section id="feature" class="section-p1"></section>
 <!-- end -->
+
+<!-- Featured Products -->
+<section id="product1" class="section-p1">
+  <h2>Featured Products</h2>
+  <p>Summer Collection New Modern Design</p>
+  <!-- Product Container -->
+  <div class="pro-container">
+    {% for product in products %}
+      <div class="pro">
+        <img src="{{ product.imageURL }}" alt="" />
+        <div class="des">
+          <span>{{product.brand}}</span>
+          <h5>{{product.name}}</h5>
+          <h4>£{{product.price|floatformat:2}}</h4>
+        </div>
+        <a href="#"><i class="fal fa-shopping-cart cart"></i></a>
+      </div>
+    {% endfor %}
+  </div>
+  <!-- End -->
+
+</section>
+<!-- End -->
 {% endblock %}
