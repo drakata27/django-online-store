@@ -10,6 +10,9 @@
   #hero button {
     background-image: url("{% static 'images/button.png' %}");
   }
+  #banner {
+    background-image: url("{% static 'images/banner/b2.jpg' %}");
+  }
 </style>
 
 <!-- Hero Section -->
@@ -31,6 +34,7 @@
   <p>Summer Collection New Modern Design</p>
   <!-- Product Container -->
   <div class="pro-container">
+    <!-- product -->
     {% for product in products %}
       <div class="pro">
         <img src="{{ product.imageURL }}" alt="" />
@@ -42,9 +46,36 @@
         <a href="#"><i class="fal fa-shopping-cart cart"></i></a>
       </div>
     {% endfor %}
+    <!-- end -->
   </div>
   <!-- End -->
-
 </section>
 <!-- End -->
+
+<!-- Call to Action Banner Section -->
+<section id="banner" class="section-m1">
+  <h4>Repair Service</h4>
+  <h2>Up to <span>70% off</span> - All T-Shirts & Accessories</h2>
+  <button class="normal">Explore More</button>
+</section>
+<!-- end -->
+
+<!-- TODO -->
+<!-- New Arrivals Section -->
+<section id="product1" class="section-p1">
+  <h2>New Arrivals</h2>
+      <p>Summer Collection New Modern Design</p>
+      <div class="pro-container">
+        <!-- product -->
+        <div class="pro">
+          <img src="img/products/f1.jpg" alt="" />
+          <div class="des">
+            <span>adidas</span>
+            <h5>Cartoon Astronaut T-Shirts</h5>
+          </div>
+          <a href="#"><i class="fal fa-shopping-cart cart"></i></a>
+        </div>
+        <!-- product end -->
+      </div>
+</section>
 {% endblock %}
