@@ -383,4 +383,79 @@ footer {
   }
   /* End Banner */
 
+  /* Text Banner */
+  #text-banner {
+    /* row */
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    padding: 0 80px;
+  }
+  
+  #text-banner .banner-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    min-width: 30%;
+    height: 30vh;
+    background-size: cover;
+    background-position: center;
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+
+  #text-banner h2 {
+    /* color: #fff; */
+    color: #fff;
+    font-weight: 900;
+    font-size: 22px;
+  }
+
+  #text-banner h3 {
+    color: #ec544e;
+    font-weight: 800;
+    font-size: 15px;
+  }
+
+  .banner-box img {
+    width: 100%; /* Adjust the width as needed */
+    height: auto; /* Maintain aspect ratio */
+    max-height: 200px; /* Adjust the height as needed */
+  }
+
+  .banner-box {
+    position: relative;
+    
+  }
+  
+  .banner-box img {
+    width: 100%; /* Adjust the width as needed */
+    height: auto; /* Maintain aspect ratio */
+  }
+  
+  .banner-box h2 {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-43%, -70%);
+    color: #fff;
+    text-align: left;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+  .banner-box h3 {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-43%, 70%);
+    color: #fff;
+    text-align: left;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+  /* End Text Banner */
+
   /* End Home Page */

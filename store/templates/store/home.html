@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block content %}
-<script src="{% static 'js/features.js' %}"></script>
+
 <style>
     #hero {
     background-image: url("{% static 'images/hero4.png' %}");
@@ -24,6 +24,7 @@
     <button>Shop Now</button>
   </section>
   <!-- end -->
+  
 <!-- Features -->
 <section id="feature" class="section-p1"></section>
 <!-- end -->
@@ -81,4 +82,9 @@
         <!-- product end -->
       </div>
 </section>
+
+<section id="text-banner"></section>
+
+<script src="{% static 'js/features.js' %}"></script>
+<script src="{% static 'js/textBanners.js' %}"></script>
 {% endblock %}
