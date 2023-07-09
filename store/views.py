@@ -9,3 +9,8 @@ def home(request):
         'new_products': new_products,
     }
     return render(request, 'store/home.html', context)
+
+
+def cart(request):
+    context={}
+    return render(request, 'store/cart.html', context )
