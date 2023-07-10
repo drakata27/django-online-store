@@ -15,13 +15,19 @@
         <div>
           <!-- Unordered list with navigation bar and links  -->
           <ul id="navbar">
-            <li><a class="active" href="index.html">Home</a></li>
+            <li><a class="active" href="{% url 'home' %}">Home</a></li>
             <li><a href="shop.html">Shop</a></li>
             <li><a href="blog.html">Blog</a></li>
             <li><a href="about.html">About</a></li>
             <li><a href="contact.html">Contact</a></li>
-            <li><a href="{% url 'cart' %}" id="lg-bag"><i class="far fa-shopping-bag"></i></a>
+
+            <div class="cart-container">
+              <li><a href="{% url 'cart' %}" id="lg-bag"><i class="far fa-shopping-bag cart-icon"></i></a>
+                <p id="cart-total">0</p>
+            </div>
+
             </li>
+
             <a href="#" id="close"><i class="far fa-times"></i></a>
           </ul>
         </div>
