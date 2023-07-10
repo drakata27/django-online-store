@@ -2,5 +2,82 @@
 {% load static %}
 
 {% block content %}
-<h1>Checkout</h1>
+<div class="checkout-container">
+    <!-- Form container -->
+    <div class="form-container">
+        <form id="form"> {% csrf_token %}
+    
+            <div id="user-info">
+                <div class="form-field">
+                    <input required class="form-control" type="text" name="name" placeholder="Name...">
+                </div>
+                <div class="form-field">
+                    <input required class="form-control" type="email" name="email" placeholder="Email...">
+                </div>
+            </div>
+    
+            <div id="shipping-info">
+                <hr>
+                    <p>Shipping Information:</p>
+                    <hr>
+                    <div class="form-field">
+                        <input class="form-control" type="text" name="address" placeholder="Address..">
+                    </div>
+                    <div class="form-field">
+                        <input class="form-control" type="text" name="city" placeholder="City..">
+                    </div>
+                    <div class="form-field">
+                        <input class="form-control" type="text" name="zipcode" placeholder="Post code..">
+                    </div>
+            </div>
+            <hr>
+            <!-- <input id="form-button" class="normal" type="submit" value="Continue"> -->
+            <button class="normal" type="submit">Continue</button>
+        </form>
+    
+        <br>
+        <div class="hidden payment-container" id="payment-info">
+            <hr>
+            <p>Payment Options</p>
+            <!-- <div id="paypal-button-container"></div> -->
+            <button id="make-payment" class="normal">Make Payment</button>
+        </div>
+    </div>
+    <!-- End Form Container -->
+
+    <!-- Order summary container -->
+    <div class="summary-container">
+        <button class="normal"><a href="{% url 'cart' %}">&#x2190; Back to Cart</a></button>
+        <h3>Order Summary</h3>
+        <div class="order-description">
+            <div style="flex:2"></div>
+            <div style="flex:2"><p><strong>Item</strong></p></div>
+            <div style="flex:1"><strong><p>Price</p></strong></div>
+            <div style="flex:1"><strong><p>Qty</p></strong></div>
+        </div>
+        <div class="cart-row">
+            <div style="flex:2"><img src="{% static 'images/f1_placeholder.jpg' %}"></div>
+            <div style="flex:2"><p>T-Shirt</p></div>
+            <div style="flex:1"><p>£23.99</p></div>
+            <div style="flex:1"><p>x1</p></div>
+        </div>
+        <div class="cart-row">
+            <div style="flex:2"><img class="row-image" src="{% static 'images/f1_placeholder.jpg' %}"></div>
+            <div style="flex:2"><p>T-Shirt</p></div>
+            <div style="flex:1"><p>£23.99</p></div>
+            <div style="flex:1"><p>x1</p></div>
+        </div>
+        <div class="cart-row">
+            <div style="flex:2"><img class="row-image" src="{% static 'images/f1_placeholder.jpg' %}"></div>
+            <div style="flex:2"><p>T-Shirt</p></div>
+            <div style="flex:1"><p>£23.99</p></div>
+            <div style="flex:1"><p>x1</p></div>
+        </div>
+        <div class="total-container">
+            <h5>Items: 1</h5>
+            <h5>Total: £23.99</h5>
+        </div>
+    </div>
+    <!-- End Order summary container -->
+</div>
 {% endblock %}

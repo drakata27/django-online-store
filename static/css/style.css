@@ -556,7 +556,6 @@ footer {
 }
 #subtotal button {
   background-color: #088178;
-  color: #fff;
   padding: 12px 20px;
 }
 #subtotal {
@@ -578,3 +577,73 @@ footer {
 }
   /* End Styling the Cart */
   /* End Cart */
+
+  /* Checkout Page */
+  .form-container {
+    padding: 30px;
+    border: 1px solid #e2e9e1;
+    padding: 30px;
+    width: 50%;
+    margin: 10px;
+  }
+  .form-container button {
+    background-color: #088178;
+    color: #fff;
+    padding: 10px 20px;
+    margin-top: 20px;
+  }
+  .form-container input {
+    padding: 10px 20px;
+    outline: none;
+    width: 30%;
+    margin-right: 10px;
+    border: 1px solid #e2e9e1;
+  }
+  .form-field {
+    padding: 10px 10px 10px 10px;
+  }
+  .payment-container {
+    margin-top: 10px;
+  }
+  .payment-container small {
+    margin-top: 10px;
+  }
+  .hidden {
+    display: none!important;
+  }
+  .summary-container {
+    flex: 1;
+    padding: 10px 20px;
+    outline: none;
+    width: 30%;
+    margin: 10px;
+    border: 1px solid #e2e9e1;
+  }
+  .summary-container button {
+    background-color: #088178;
+    margin-bottom: 20px;
+  }
+  .summary-container img {
+    width: 80px;
+  }
+  .cart-row {
+    display: flex;
+    border: 1px solid #e2e9e1;
+    padding: 10px 10px 10px 10px;
+    /* width: 50%; */
+    margin: 10px;
+  }
+  .checkout-container{
+    display: flex;
+  }
+  .total-container h5{
+    margin: 10px;
+  }
+  .order-description {
+    display: flex;
+    /* border: 1px solid #e2e9e1; */
+    padding: 10px;
+    /* width: 50%; */
+    margin: 10px;
+  }
+  /* End Checkout Page */
