@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from . models import Product
+from . models import Product, Customer, OrderItem, Order
 
 def home(request):
     featured_products = Product.objects.filter(image__istartswith='f')
@@ -12,7 +12,30 @@ def home(request):
 
 
 def cart(request):
-    context={}
+    if request.user.is_authenticated:
+        customer = request.user.customer
+        order, created = Order.objects.get_or_create(customer=customer, complete=False)
+        items = order.orderitem_set.all()
+        print('User is authenticated')
+    else:
+        print('User is not authenticated')
+        items=[]
+
+    # debugging
+    if items:
+        for i in items:
+            print(i)
+    else:
+        print('No data')
+    
+    
+    
+    print(customer)
+    print(order)
+    print(items)
+    # end debugging
+
+    context = {'items': items}
     return render(request, 'store/cart.html', context )
 
 def checkout(request):

@@ -30,8 +30,8 @@ class Product(models.Model):
 class Order(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, blank=True, null=True)
     date_ordered = models.DateTimeField(auto_now_add=True)
-    complete = models.BooleanField(default=False, null=True, blank=True)
-    transaction_id = models.CharField(max_length=200, null=True)
+    complete = models.BooleanField(default=False)
+    transaction_id = models.CharField(max_length=100, null=True)
 
     def __str__(self) -> str:
         return str(self.id)
@@ -50,7 +50,7 @@ class Order(models.Model):
     
     # Calculates how many items are in the cart e.g 2 Watches + 1 Book = 3 items
     @property
-    def get_cart_total(self):
+    def get_cart_items(self):
         #retrieves all the related OrderItem objects via reverse relation
         orderitems=self.orderitem_set.all()
 
@@ -70,7 +70,7 @@ class OrderItem(models.Model):
     def __str__(self) -> str:
         return str(self.id)
     
-    # total price
+    # total price for a single product in terms of its qty
     @property
     def get_total(self):
         return self.product.price * self.quantity
