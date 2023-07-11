@@ -27,6 +27,7 @@ class Product(models.Model):
             url = ''
         return url
 
+# The whole cart
 class Order(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, blank=True, null=True)
     date_ordered = models.DateTimeField(auto_now_add=True)
@@ -60,7 +61,7 @@ class Order(models.Model):
         #     total += item.quantity
         return total
 
-
+# A single item in the cart
 class OrderItem(models.Model):
     product = models.ForeignKey(Product, on_delete=models.SET_NULL, blank=True, null=True)
     order = models.ForeignKey(Order, on_delete=models.SET_NULL, blank=True, null=True)

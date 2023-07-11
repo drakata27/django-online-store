@@ -30,16 +30,16 @@
           </thead>
         
           {% for item in items %}
-          <tbody>
-            <tr>
-                <td><a href="#"><i class="far fa-times-circle"></a></i></td>
-                <td><img src="{{ item.product.imageURL }}" alt=""></td>
-                <td>{{item.product.name}}</td>
-                <td>£{{item.product.price|floatformat:2}}</td>
-                <td><input type="number" value="{{item.quantity}}"></td>
-                <td>£{{item.get_total}}</td>
-            </tr>
-          </tbody>
+            <tbody>
+              <tr>
+                  <td><a href="#"><i class="far fa-times-circle"></a></i></td>
+                  <td><img src="{{ item.product.imageURL }}" alt=""></td>
+                  <td>{{item.product.name}}</td>
+                  <td>£{{item.product.price|floatformat:2}}</td>
+                  <td><input type="number" value="{{item.quantity}}"></td>
+                  <td>£{{item.get_total}}</td>
+              </tr>
+            </tbody>
         {% endfor %}
     </table>
 

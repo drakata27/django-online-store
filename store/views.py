@@ -14,26 +14,12 @@ def home(request):
 def cart(request):
     if request.user.is_authenticated:
         customer = request.user.customer
-        order, created = Order.objects.get_or_create(customer=customer, complete=False)
+        order, created = Order.objects.get_or_create(customer=customer, complete=False)        
         items = order.orderitem_set.all()
         print('User is authenticated')
     else:
         print('User is not authenticated')
         items=[]
-
-    # debugging
-    if items:
-        for i in items:
-            print(i)
-    else:
-        print('No data')
-    
-    
-    
-    print(customer)
-    print(order)
-    print(items)
-    # end debugging
 
     context = {'items': items}
     return render(request, 'store/cart.html', context )
