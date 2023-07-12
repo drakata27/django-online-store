@@ -6,8 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"/>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    <script type="text/javascript" src="{% static 'js/cart.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/navbarActive.js' %}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <title>Online Store</title>
 </head>
 <body>
@@ -17,7 +16,7 @@
         <div>
           <!-- Unordered list with navigation bar and links  -->
           <ul id="navbar">
-            <li><a class="active" href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'home' %}">Home</a></li>
             <li><a href="{% url 'shop' %}">Shop</a></li>
             <li><a href="{% url 'blog' %}">Blog</a></li>
             <li><a href="{% url 'about' %}">About</a></li>
@@ -111,5 +110,9 @@
         <!-- end -->
       </footer>
       <!-- end -->
+
+      <!-- Scripts -->
+      <script type="text/javascript" src="{% static 'js/cart.js' %}"></script>
+      <script type="text/javascript" src="{% static 'js/navbarActive.js' %}"></script>
 </body>
 </html>

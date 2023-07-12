@@ -1,35 +1,17 @@
-// const bar = document.getElementById("bar");
-// const close = document.getElementById("close");
-// const nav = document.getElementById("navbar");
-
-// if (bar) {
-//   bar.addEventListener("click", () => {
-//     nav.classList.add("active");
-//   });
-// }
-// if (close) {
-//   close.addEventListener("click", () => {
-//     nav.classList.remove("active");
-//   });
-// }
-
-// console.log('Navbar js file ');
-
-
-document.addEventListener('DOMContentLoaded', function() {
-    var navbar = document.querySelector('#navbar');
+$(document).ready(function() {
+    var currentURL = window.location.pathname;
   
-    navbar.addEventListener('click', function(event) {
-      if (event.target.tagName === 'A') {
-        var currentActive = navbar.querySelector('.active');
+    $('#navbar a').each(function() {
+      var linkURL = $(this).attr('href');
   
-        if (currentActive) {
-          currentActive.classList.remove('active');
-        }
-  
-        event.target.classList.add('active');
+      if (currentURL === linkURL) {
+        $(this).addClass('active');
       }
     });
-  });
   
+    $('#navbar a').click(function() {
+      $('#navbar a').removeClass('active');
+      $(this).addClass('active');
+    });
+  });
   
