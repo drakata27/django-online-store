@@ -576,6 +576,9 @@ footer {
   font-size: 13px;
 }
   /* End Styling the Cart */
+  .remove-btn {
+    color: red;
+  }
   /* End Cart */
 
   /* Checkout Page */
