@@ -36,7 +36,15 @@
                   <td><img src="{{ item.product.imageURL }}" alt=""></td>
                   <td>{{item.product.name}}</td>
                   <td>£{{item.product.price|floatformat:2}}</td>
-                  <td><input type="number" value="{{item.quantity}}"></td>
+                  
+                  <div class="qty-btns">
+                    <td>
+                      <a href="#"><i class="fa fa-minus-circle" aria-hidden="true"></i></a>
+                      {{item.quantity}}
+                      <a href="#"><i class="fa fa-plus-circle" aria-hidden="true"></i></a>
+                    </td>
+                  </div>
+                  
                   <td>£{{item.get_total}}</td>
               </tr>
             </tbody>
@@ -51,7 +59,7 @@
                 <td>Cart Subtotal</td>
                 <td>£{{order.get_cart_total}}</td>
               </tr>
-    
+
               <tr>
                 <td>Shipping</td>
                 <td>Free</td> 

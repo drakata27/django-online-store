@@ -575,6 +575,12 @@ footer {
   padding: 10px;
   font-size: 13px;
 }
+.fa-minus-circle,
+.fa-plus-circle {
+  color: #088178;
+  padding: 10px;
+}
+
   /* End Styling the Cart */
   .remove-btn {
     color: red;
