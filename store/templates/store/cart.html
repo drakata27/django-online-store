@@ -56,6 +56,11 @@
             <h3>Cart Totals</h3>
             <table>
               <tr>
+                <td>Items</td>
+                <td>{{order.get_cart_items}}</td>
+              </tr>
+
+              <tr>
                 <td>Cart Subtotal</td>
                 <td>£{{order.get_cart_total}}</td>
               </tr>
