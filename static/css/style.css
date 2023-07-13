@@ -580,7 +580,9 @@ footer {
   color: #088178;
   padding: 10px;
 }
-
+.update-cart:hover {
+  cursor: pointer;
+}
   /* End Styling the Cart */
   .remove-btn {
     color: red;

@@ -44,7 +44,7 @@
           <h5>{{product.name}}</h5>
           <h4>£{{product.price|floatformat:2}}</h4>
         </div>
-        <a href="#"><i class="fal fa-shopping-cart cart"></i></a>
+        <button data-product={{product.id}} data-action="add" class="update-cart"><i class="fal fa-shopping-cart cart"></i></button>
       </div>
     {% endfor %}
     <!-- end -->
@@ -76,7 +76,7 @@
               <h5>{{product.name}}</h5>
               <h4>£{{ product.price|floatformat:2 }}</h4>
             </div>
-            <a href="#"><i class="fal fa-shopping-cart cart"></i></a>
+            <button data-product={{product.id}} data-action="add" class="update-cart"><i class="fal fa-shopping-cart cart"></i></button>
           </div>
         {% endfor %}
         <!-- product end -->
