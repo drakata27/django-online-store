@@ -26,7 +26,17 @@ def cart(request):
     return render(request, 'store/cart.html', context )
 
 def checkout(request):
-    context = {}
+    if request.user.is_authenticated:
+        customer = request.user.customer
+        order, created = Order.objects.get_or_create(customer=customer, complete=False)        
+        items = order.orderitem_set.all()
+        print('User is authenticated')
+    else:
+        print('User is not authenticated')
+        items=[]
+        order = {'get_cart_total':0, }
+
+    context = {'items': items, 'order': order, 'get_cart_items': 0}
     return render(request, 'store/checkout.html', context)
 
 def shop(request):
