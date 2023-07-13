@@ -20,8 +20,9 @@ def cart(request):
     else:
         print('User is not authenticated')
         items=[]
+        order = {'get_cart_total':0, }
 
-    context = {'items': items, 'order': order}
+    context = {'items': items, 'order': order, 'get_cart_items': 0}
     return render(request, 'store/cart.html', context )
 
 def checkout(request):

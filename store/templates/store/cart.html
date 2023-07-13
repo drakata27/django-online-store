@@ -56,7 +56,11 @@
             <h3>Cart Totals</h3>
             <table>
               <tr>
-                <td>Items</td>
+                {% if order.get_cart_items > 1 %}
+                  <td>Items</td>
+                {% else %}
+                  <td>Item</td>
+                {% endif %}
                 <td>{{order.get_cart_items}}</td>
               </tr>
 
