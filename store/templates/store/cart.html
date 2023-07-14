@@ -32,16 +32,16 @@
           {% for item in items %}
             <tbody>
               <tr>
-                  <td><a class="remove-btn" href="#"><i class="far fa-times-circle"></a></i></td>
+                  <td><button data-product={{item.product.id}} data-action="delete" class="remove-btn update-cart"><i class="far fa-times-circle"></i></button></td>
                   <td><img src="{{ item.product.imageURL }}" alt=""></td>
                   <td>{{item.product.name}}</td>
                   <td>£{{item.product.price|floatformat:2}}</td>
                   
                   <div class="qty-btns">
                     <td>
-                      <a href="#"><i class="fa fa-minus-circle" aria-hidden="true"></i></a>
+                      <button data-product={{item.product.id}} data-action="remove" class="update-cart qty-btn"><i class="fa fa-minus-circle" aria-hidden="true"></i></button>
                       {{item.quantity}}
-                      <a href="#"><i class="fa fa-plus-circle" aria-hidden="true"></i></a>
+                      <button data-product={{item.product.id}} data-action="add" class="update-cart qty-btn"><i class="fa fa-plus-circle" aria-hidden="true"></i></button>
                     </td>
                   </div>
                   

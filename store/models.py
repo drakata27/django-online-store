@@ -43,10 +43,7 @@ class Order(models.Model):
         #retrieves all the related OrderItem objects via reverse relation
         orderitems=self.orderitem_set.all()
 
-        total = sum([item.get_total for item in orderitems])
-        # total = 0
-        # for item in orderitems:
-        #     total += item.get_total 
+        total = sum([item.get_total for item in orderitems]) 
         return total
     
     # Calculates how many items are in the cart e.g 2 Watches + 1 Book = 3 items
@@ -56,9 +53,6 @@ class Order(models.Model):
         orderitems=self.orderitem_set.all()
 
         total = sum([item.quantity for item in orderitems])
-        # total = 0
-        # for item in orderitems:
-        #     total += item.quantity
         return total
 
 # A single item in the cart

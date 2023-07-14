@@ -587,6 +587,18 @@ footer {
   .remove-btn {
     color: red;
   }
+  .qty-btn,
+  .remove-btn {
+    padding: 0;
+    background: none;
+    border: none;
+    width: auto;
+    height: auto;
+    display: inline-block;
+  }
+  .remove-btn:hover {
+    cursor: pointer;
+  }
   /* End Cart */
 
   /* Checkout Page */
