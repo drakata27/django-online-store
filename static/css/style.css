@@ -599,6 +599,10 @@ footer {
   .remove-btn:hover {
     cursor: pointer;
   }
+  .empty-cart{
+    width: 40%;
+    height: 40%;
+  }
   /* End Cart */
 
   /* Checkout Page */

@@ -6,7 +6,6 @@
     <!-- Form container -->
     <div class="form-container">
         <form id="form"> {% csrf_token %}
-    
             <div id="user-info">
                 <div class="form-field">
                     <input required class="form-control" type="text" name="name" placeholder="Name...">
@@ -14,10 +13,10 @@
                 <div class="form-field">
                     <input required class="form-control" type="email" name="email" placeholder="Email...">
                 </div>
-            </div>
-    
-            <div id="shipping-info">
                 <hr>
+            </div>
+            
+            <div id="shipping-info">
                     <p>Shipping Information:</p>
                     <hr>
                     <div class="form-field">
@@ -31,16 +30,14 @@
                     </div>
             </div>
             <hr>
-            <!-- <input id="form-button" class="normal" type="submit" value="Continue"> -->
-            <button class="normal" type="submit">Continue</button>
+            <button id='submit-btn' class="normal" type="submit">Continue</button>
         </form>
     
         <br>
         <div class="hidden payment-container" id="payment-info">
             <hr>
             <p>Payment Options</p>
-            <!-- <div id="paypal-button-container"></div> -->
-            <button id="make-payment" class="normal">Make Payment</button>
+            <button id="make-payment" class="normal">Pay</button>
         </div>
     </div>
     <!-- End Form Container -->

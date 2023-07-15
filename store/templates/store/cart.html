@@ -33,7 +33,7 @@
             <tbody>
               <tr>
                   <td><button data-product={{item.product.id}} data-action="delete" class="remove-btn update-cart"><i class="far fa-times-circle"></i></button></td>
-                  <td><img src="{{ item.product.imageURL }}" alt=""></td>
+                  <td><img src="{{ item.product.imageURL }}" alt="product"></td>
                   <td>{{item.product.name}}</td>
                   <td>£{{item.product.price|floatformat:2}}</td>
                   
@@ -51,38 +51,46 @@
         {% endfor %}
     </table>
 
-    <section id="cart-add" class="section-p1">
-        <div id="subtotal">
-            <h3>Cart Totals</h3>
-            <table>
-              <tr>
-                {% if order.get_cart_items > 1 %}
-                  <td>Items</td>
-                {% else %}
-                  <td>Item</td>
-                {% endif %}
-                <td>{{order.get_cart_items}}</td>
-              </tr>
+    {% if order.get_cart_items == 0 %}
+      <div style="margin: 10px; text-align:center;">
+        <img class="empty-cart" src="{% static 'images/empty-cart.jpeg'%}" alt="cart is empty">
+        <h3>Add something to make me happy!</h1>
+      </div>
+    {% else %}
+      <section id="cart-add" class="section-p1">
+          <div id="subtotal">
+              <h3>Cart Totals</h3>
+              <table>
+                <tr>
+                  {% if order.get_cart_items > 1 %}
+                    <td>Items</td>
+                  {% else %}
+                    <td>Item</td>
+                  {% endif %}
+                  <td>{{order.get_cart_items}}</td>
+                </tr>
 
-              <tr>
-                <td>Cart Subtotal</td>
-                <td>£{{order.get_cart_total|floatformat:2}}</td>
-              </tr>
+                <tr>
+                  <td>Cart Subtotal</td>
+                  <td>£{{order.get_cart_total|floatformat:2}}</td>
+                </tr>
 
-              <tr>
-                <td>Shipping</td>
-                <td>Free</td> 
-              </tr>
-    
-              <tr>
-                <td><strong>Total</strong></td>
-                <td><strong>£{{order.get_cart_total}}</strong></td>
-              </tr>
-            </table>
-    
-            <button class="normal"><a href="{% url 'checkout' %}">Proceed to checkout</a></button>
-          </div>
-    </section>
+                <tr>
+                  <td>Shipping</td>
+                  <td>Free</td> 
+                </tr>
+      
+                <tr>
+                  <td><strong>Total</strong></td>
+                  <td><strong>£{{order.get_cart_total}}</strong></td>
+                </tr>
+              </table>
+      
+              <button class="normal"><a href="{% url 'checkout' %}">Proceed to checkout</a></button>
+            </div>
+      </section>
+    {% endif %}
+
 </section>
 <!-- End Cart Section -->
 {% endblock %}
