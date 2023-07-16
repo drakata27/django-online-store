@@ -36,7 +36,8 @@ def cart(request):
     else:
         items=[]
         order = {'get_cart_total':0, 'get_cart_items':0,}
-        cart_items['get_cart_items']
+        # cart_items['get_cart_items']
+        cart_items = 0
 
     context = {
         'items': items, 'order': order, 
