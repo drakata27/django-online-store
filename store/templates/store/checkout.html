@@ -81,6 +81,9 @@
     var payBtn = document.getElementById('make-payment')
     var userInfo = document.getElementById('user-info')
     var total = '{{order.get_cart_total}}'
+    
+    csrftoken = form.getElementsByTagName('input')[0].value
+    console.log('New Token: ', csrftoken);
 
     if (user != 'AnonymousUser' && userInfo != null ) {
         userInfo.innerHTML = ''
