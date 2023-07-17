@@ -7,7 +7,7 @@ for(var i = 0; i < updateBtns.length; i++){
         console.log('productId: ',productId, 'Action: ', action);
 
         console.log('USER: ', user);
-        if (user === 'AnonymousUser'){
+        if (user == 'AnonymousUser'){
             addCookieItem(productId, action)
         } else {
             updateUserOrder(productId, action)
@@ -26,12 +26,16 @@ function addCookieItem(productId, action){
         }
     }
 
-    if (action == 'remove') {
-        if(cart[productId]['quantity'] < 1){
-            delete cart[productId]
-        } else {
-            cart[productId]['quantity'] -= 1  
+    if(action == 'remove'){
+        cart[productId]['quantity'] -= 1
+        if (cart[productId]['quantity'] <=0 ) {
+            console.log("Remove Item");
+            delete cart[productId]  
         }
+    }
+
+    if(action == 'delete') {
+        delete cart[productId]
     }
 
     console.log('Cart: ',cart);
