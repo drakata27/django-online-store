@@ -87,9 +87,15 @@ def processOrder(request):
     total = float(data['form']['total'])
     order.transaction_id = transaction_id 
 
-    if total == Decimal(order.get_cart_total):
+    if total == float(order.get_cart_total):
         order.complete=True
+        print('Added to the DB')
+    else:
+        print('Not the same values')
     order.save()
+
+    print('Data type of total:', type(total))
+    print('Data type of get_total:', type(order.get_cart_total))
 
     ShippingAddress.objects.create(
             customer=customer,
