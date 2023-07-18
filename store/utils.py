@@ -66,16 +66,13 @@ def cart_data(request):
     return data
 
 def guest_order(request, data):
-    print('User is not logged in')
-    print('Cookies: ', request.COOKIES)
-
     name = data['form']['name']
     email = data['form']['email']
 
     guest_data = guest_cart(request)
     items = guest_data['items']
 
-    customer, created = Customer.objects.get_or_create(email=email)
+    customer, created = Customer.objects.get_or_create(email=email,)
     customer.name = name
     customer.save()
 
@@ -85,12 +82,7 @@ def guest_order(request, data):
     )
 
     for item in items:
-        product = Product.objects.create(id=item['product']['id'])
-        # product = Product.objects.create(
-        #     name=item['product']['name'],
-        #     brand=item['product']['brand'],
-        #     price=item['product']['price'],
-        # )
+        product = Product.objects.get(id=item['product']['id'])
 
         orderItem = OrderItem.objects.create(
             product=product,
