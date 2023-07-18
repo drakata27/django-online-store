@@ -27,6 +27,7 @@ def guest_cart(request):
                     'id': product.id,
                     'name': product.name,
                     'price': product.price,
+                    'brand': product.brand,
                     'imageURL': product.imageURL,
                 },
                 'quantity': cart[i]['quantity'],
@@ -43,3 +44,58 @@ def guest_cart(request):
     }
     
     return guest_data
+
+def cart_data(request):
+    if request.user.is_authenticated:
+        customer = request.user.customer
+        order, created = Order.objects.get_or_create(customer=customer, complete=False)        
+        items = order.orderitem_set.all()
+        cart_items = order.get_cart_items
+    else:
+        guest_data = guest_cart(request)
+        cart_items = guest_data['cart_items']
+        order = guest_data['order']
+        items = guest_data['items']
+
+    data = {
+        'items': items, 
+        'order': order, 
+        'cart_items': cart_items,
+    }
+    
+    return data
+
+def guest_order(request, data):
+    print('User is not logged in')
+    print('Cookies: ', request.COOKIES)
+
+    name = data['form']['name']
+    email = data['form']['email']
+
+    guest_data = guest_cart(request)
+    items = guest_data['items']
+
+    customer, created = Customer.objects.get_or_create(email=email)
+    customer.name = name
+    customer.save()
+
+    order = Order.objects.create(
+        customer=customer,
+        complete=False,
+    )
+
+    for item in items:
+        product = Product.objects.create(id=item['product']['id'])
+        # product = Product.objects.create(
+        #     name=item['product']['name'],
+        #     brand=item['product']['brand'],
+        #     price=item['product']['price'],
+        # )
+
+        orderItem = OrderItem.objects.create(
+            product=product,
+            order=order,
+            quantity=item['quantity'],
+        )
+
+    return customer, order

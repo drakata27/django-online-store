@@ -98,11 +98,11 @@
         })
 
 
-        payBtn.addEventListener('click', (e)=>{
+        payBtn.addEventListener('click', function(){
             submitForm()
         })
 
-        function submitForm(e){
+        function submitForm(){
             console.log('Payment successful!');
 
             var userForm = {
@@ -138,12 +138,14 @@
                 },
                 body: JSON.stringify({'form': userForm, 'shipping': shippingInfo})
             })
-            .then((response)=>{
-                return response.json()
-            })
-            .then((data)=>{
+            .then((response) => response.json())
+            .then((data) => {
                 console.log('Success: ', data);
                 alert('Transaction Completed!')
+
+                cart = {}
+                document.cookie = "cart=" + JSON.stringify(cart) + ";domain=;path=/"
+
                 window.location.href = "{% url 'home' %}"
             })
         }

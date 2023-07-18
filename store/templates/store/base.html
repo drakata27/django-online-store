@@ -27,7 +27,7 @@
         }
         return cookieValue;
     }
-    const csrftoken = getToken('csrftoken');
+    var csrftoken = getToken('csrftoken');
 
     function getCookie(name) {
 		    // Split cookie string and get all individual name=value pairs in an array
@@ -123,11 +123,11 @@
         <!-- About div -->
         <div class="col">
           <h4>About</h4>
-          <a href="#">About us</a>
+          <a href="{% url 'about' %}">About us</a>
           <a href="#">Delivery Information</a>
           <a href="#">Privacy Policy</a>
           <a href="#">Terms & Conditions</a>
-          <a href="#">Contact Us</a>
+          <a href="{% url 'contact' %}">Contact Us</a>
         </div>
         <!-- end -->
   

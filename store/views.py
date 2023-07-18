@@ -3,19 +3,15 @@ from django.http import JsonResponse
 from . models import *
 import datetime
 import json
-from . utils import guest_cart 
+from . utils import *
+from decimal import Decimal
 
 def home(request):
     featured_products = Product.objects.filter(image__istartswith='f')
     new_products = Product.objects.filter(image__istartswith='n')
 
-    if request.user.is_authenticated:
-        customer = request.user.customer
-        order, created = Order.objects.get_or_create(customer=customer, complete=False)        
-        cart_items = order.get_cart_items
-    else:
-        guest_data = guest_cart(request)
-        cart_items = guest_data['cart_items']
+    guest_data = cart_data(request)
+    cart_items = guest_data['cart_items']
 
     context = {
         'featured_products': featured_products,
@@ -26,17 +22,10 @@ def home(request):
 
 
 def cart(request):
-    
-    if request.user.is_authenticated:
-        customer = request.user.customer
-        order, created = Order.objects.get_or_create(customer=customer, complete=False)        
-        items = order.orderitem_set.all()
-        cart_items = order.get_cart_items
-    else:
-       guest_data = guest_cart(request)
-       cart_items = guest_data['cart_items']
-       order = guest_data['order']
-       items = guest_data['items']
+    guest_data = cart_data(request)
+    cart_items = guest_data['cart_items']
+    order = guest_data['order']
+    items = guest_data['items']
             
     context = {
         'items':items,
@@ -46,16 +35,10 @@ def cart(request):
     return render(request, 'store/cart.html', context )
 
 def checkout(request):
-    if request.user.is_authenticated:
-        customer = request.user.customer
-        order, created = Order.objects.get_or_create(customer=customer, complete=False)        
-        items = order.orderitem_set.all()
-        cart_items = order.get_cart_items
-    else:
-        guest_data = guest_cart(request)
-        cart_items = guest_data['cart_items']
-        order = guest_data['order']
-        items = guest_data['items']
+    guest_data = cart_data(request)
+    cart_items = guest_data['cart_items']
+    order = guest_data['order']
+    items = guest_data['items']
         
     context = {
         'items': items, 'order': order,
@@ -90,6 +73,7 @@ def updateItem(request):
 
     return JsonResponse('Item was updated', safe=False)
 
+
 def processOrder(request):
     transaction_id = datetime.datetime.now().timestamp()
     data = json.loads(request.body)
@@ -97,12 +81,6 @@ def processOrder(request):
     if request.user.is_authenticated:
         customer = request.user.customer
         order, created = Order.objects.get_or_create(customer=customer, complete=False)
-        total = float(data['form']['total'])
-        order.transaction_id = transaction_id
-
-        if total == float(order.get_cart_total):
-            order.complete=True
-        order.save()
 
         ShippingAddress.objects.create(
             customer=customer,
@@ -112,22 +90,24 @@ def processOrder(request):
             postcode = data['shipping']['postcode'],
         )
     else:
-        print('User is not logged in')
+        customer, order = guest_order(request, data)
+
+    total = float(data['form']['total'])
+    order.transaction_id = transaction_id 
+
+    if total == Decimal(order.get_cart_total):
+        order.complete=True
+    order.save()
+
     return JsonResponse('Payment submitted...', safe=False)
 
 def shop(request):
     featured_products = Product.objects.filter(image__istartswith='f')
     new_products = Product.objects.filter(image__istartswith='n')
 
-    if request.user.is_authenticated:
-        customer = request.user.customer
-        order, created = Order.objects.get_or_create(customer=customer, complete=False)        
-        items = order.orderitem_set.all()
-        cart_items = order.get_cart_items
-    else:
-        guest_data = guest_cart(request)
-        cart_items = guest_data['cart_items']
-        items = guest_data['items']
+    guest_data = cart_data(request)
+    cart_items = guest_data['cart_items']
+    items = guest_data['items']
 
     context = {
         'items': items,
@@ -138,13 +118,8 @@ def shop(request):
     return render(request, 'store/shop.html', context)
 
 def blog(request):
-    if request.user.is_authenticated:
-        customer = request.user.customer
-        order, created = Order.objects.get_or_create(customer=customer, complete=False)        
-        cart_items = order.get_cart_items
-    else:
-        guest_data = guest_cart(request)
-        cart_items = guest_data['cart_items']
+    guest_data = cart_data(request)
+    cart_items = guest_data['cart_items']
         
     context = {
         'cart_items': cart_items,
@@ -152,13 +127,8 @@ def blog(request):
     return render(request, 'store/blog.html', context)
 
 def about(request):
-    if request.user.is_authenticated:
-        customer = request.user.customer
-        order, created = Order.objects.get_or_create(customer=customer, complete=False)        
-        cart_items = order.get_cart_items
-    else:
-        guest_data = guest_cart(request)
-        cart_items = guest_data['cart_items']
+    guest_data = cart_data(request)
+    cart_items = guest_data['cart_items']
         
     context = {
         'cart_items': cart_items,
@@ -166,14 +136,8 @@ def about(request):
     return render(request, 'store/about.html', context)
 
 def contact(request):
-    if request.user.is_authenticated:
-        customer = request.user.customer
-        order, created = Order.objects.get_or_create(customer=customer, complete=False)        
-        items = order.orderitem_set.all()
-        cart_items = order.get_cart_items
-    else:
-        guest_data = guest_cart(request)
-        cart_items = guest_data['cart_items']
+    guest_data = cart_data(request)
+    cart_items = guest_data['cart_items']
         
     context = {
         'cart_items': cart_items,
