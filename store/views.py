@@ -156,10 +156,23 @@ def contact(request):
     return render(request, 'store/contact.html', context)
 
 def checkout_session(request):
-    # TEST STRIPE
+    guest_data = cart_data(request)
+    items = guest_data['items']
+
     DOMAIN = 'http://' + os.getenv('HOST_AND_PORT') + '/'
     stripe.api_key=settings.STRIPE_SECRET_KEY
-    
+
+    # TODO
+    # line_items = []
+    # for item in items:
+    #     product = item['product']
+    #     quantity = item['quantity']
+    #     line_item = {
+    #         'price': product.stripe_price_id,
+    #         'quantity': quantity,
+    #     }
+    #     line_items.append(line_item)
+
     checkout_session = stripe.checkout.Session.create(
             payment_method_types=['card'],
             line_items=[
