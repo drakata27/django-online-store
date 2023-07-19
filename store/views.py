@@ -49,13 +49,7 @@ def checkout(request):
         'items': items, 'order': order,
         'get_cart_items': 0,
         'cart_items': cart_items,
-        'checkout_session_url' : None,
     }
-    
-    if request.method == 'POST':
-        # Call the checkout_session function to initiate the Stripe checkout
-        checkout_session_url = checkout_session()
-        context['checkout_session_url'] = checkout_session_url
     
         
     return render(request, 'store/checkout.html', context)
@@ -102,13 +96,11 @@ def processOrder(request):
 
     if total == float(order.get_cart_total):
         order.complete=True
-        print('Added to the DB')
+        print('Order is completed')
     else:
-        print('Not the same values')
+        print('Order is NOT completed')
     order.save()
 
-    print('Data type of total:', type(total))
-    print('Data type of get_total:', type(order.get_cart_total))
 
     ShippingAddress.objects.create(
             customer=customer,
@@ -118,8 +110,6 @@ def processOrder(request):
             postcode = data['shipping']['postcode'],
     )
 
-     # TEST STRIPE
- 
     return JsonResponse('Payment submitted...', safe=False)
 
 def shop(request):
@@ -165,7 +155,7 @@ def contact(request):
         }
     return render(request, 'store/contact.html', context)
 
-def checkout_session():
+def checkout_session(request):
     # TEST STRIPE
     DOMAIN = 'http://' + os.getenv('HOST_AND_PORT') + '/'
     stripe.api_key=settings.STRIPE_SECRET_KEY
@@ -179,7 +169,7 @@ def checkout_session():
                 },
             ],
             mode='payment',
-            success_url=DOMAIN,
+            success_url=DOMAIN,  
             cancel_url=DOMAIN,
         )
     

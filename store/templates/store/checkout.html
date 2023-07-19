@@ -36,9 +36,9 @@
         <br>
         <div class="hidden payment-container" id="payment-info">
             <hr>
-            <p>Payment Options</p>
+            <p>Payment</p>
             <!-- <button id="make-payment" class="normal">Pay</button> -->
-            <form action="{{ checkout_session }}" method="POST">
+            <form action="{% url 'checkout_session' %}" method="POST">
                 {% csrf_token %}
                 <button type="submit" id="make-payment" class="normal">Pay</button>
             </form>
@@ -149,7 +149,7 @@
                 cart = {}
                 document.cookie = "cart=" + JSON.stringify(cart) + ";domain=;path=/"
 
-                window.location.href = "{% url 'home' %}"
+                window.location.href = "{% url 'checkout_session' %}"
             })
         }
     }
