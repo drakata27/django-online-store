@@ -11,4 +11,6 @@ urlpatterns = [
     path('contact/', views.contact, name='contact'),
     path('update_item/', views.updateItem, name='update_item'),
     path('process_order/', views.processOrder, name='process_order'),
+    # stripe testing
+    path('checkout_session/', views.checkout_session, name='checkout_session'),
 ]

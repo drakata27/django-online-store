@@ -16,7 +16,8 @@ class Product(models.Model):
     image = models.ImageField(null=True, blank=True)
 
     def __str__(self) -> str:
-        return self.name
+        return self.name + ' ' + str(self.id)
+
 
     # if there is no image the page won't crash but render the page without the image
     @property

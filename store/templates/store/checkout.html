@@ -37,7 +37,11 @@
         <div class="hidden payment-container" id="payment-info">
             <hr>
             <p>Payment Options</p>
-            <button id="make-payment" class="normal">Pay</button>
+            <!-- <button id="make-payment" class="normal">Pay</button> -->
+            <form action="{{ checkout_session }}" method="POST">
+                {% csrf_token %}
+                <button type="submit" id="make-payment" class="normal">Pay</button>
+            </form>
         </div>
     </div>
     <!-- End Form Container -->
@@ -141,7 +145,6 @@
             .then((response) => response.json())
             .then((data) => {
                 console.log('Success: ', data);
-                alert('Transaction Completed!')
 
                 cart = {}
                 document.cookie = "cart=" + JSON.stringify(cart) + ";domain=;path=/"

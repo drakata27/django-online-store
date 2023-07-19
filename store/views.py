@@ -1,10 +1,15 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from . models import *
 import datetime
 import json
 from . utils import *
-from decimal import Decimal
+import stripe
+from django.conf import settings
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
 
 def home(request):
     featured_products = Product.objects.filter(image__istartswith='f')
@@ -39,12 +44,20 @@ def checkout(request):
     cart_items = guest_data['cart_items']
     order = guest_data['order']
     items = guest_data['items']
-        
+
     context = {
         'items': items, 'order': order,
         'get_cart_items': 0,
         'cart_items': cart_items,
-        }
+        'checkout_session_url' : None,
+    }
+    
+    if request.method == 'POST':
+        # Call the checkout_session function to initiate the Stripe checkout
+        checkout_session_url = checkout_session()
+        context['checkout_session_url'] = checkout_session_url
+    
+        
     return render(request, 'store/checkout.html', context)
 
 def updateItem(request):
@@ -105,6 +118,8 @@ def processOrder(request):
             postcode = data['shipping']['postcode'],
     )
 
+     # TEST STRIPE
+ 
     return JsonResponse('Payment submitted...', safe=False)
 
 def shop(request):
@@ -149,3 +164,23 @@ def contact(request):
         'cart_items': cart_items,
         }
     return render(request, 'store/contact.html', context)
+
+def checkout_session():
+    # TEST STRIPE
+    DOMAIN = 'http://' + os.getenv('HOST_AND_PORT') + '/'
+    stripe.api_key=settings.STRIPE_SECRET_KEY
+    
+    checkout_session = stripe.checkout.Session.create(
+            payment_method_types=['card'],
+            line_items=[
+                {
+                    'price': 'price_1NVZHxKEjjyTT4MxUrxfXRHU',
+                    'quantity': 1,
+                },
+            ],
+            mode='payment',
+            success_url=DOMAIN,
+            cancel_url=DOMAIN,
+        )
+    
+    return redirect(checkout_session.url, code=303)
