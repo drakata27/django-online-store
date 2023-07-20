@@ -38,10 +38,11 @@
             <hr>
             <p>Payment</p>
             <!-- <button id="make-payment" class="normal">Pay</button> -->
-            <form action="{% url 'checkout_session' %}" method="POST">
+            <!-- <form method="POST">
                 {% csrf_token %}
-                <button type="submit" id="make-payment" class="normal">Pay</button>
-            </form>
+                <button type="submit" id="make-payment" class="normal"><a href="{% url 'checkout_session' %}">Pay</a></button>
+            </form> -->
+            <button id="make-payment" class="normal">Pay</button>
         </div>
     </div>
     <!-- End Form Container -->
@@ -107,29 +108,28 @@
         })
 
         function submitForm(){
-            console.log('Payment successful!');
-
+            
             var userForm = {
                 'name':null,
                 'email':null,
                 'total':total,
             }
-
+            
             var shippingInfo = {
                 'address': null,
                 'city': null,
                 'postcode': null,
             }
-
+            
             if (user == 'AnonymousUser'){
                 userForm.name = form.name.value
                 userForm.email = form.email.value
             }
-
+            
             shippingInfo.address = form.address.value
             shippingInfo.city = form.city.value
             shippingInfo.postcode = form.postcode.value
-
+            
             console.log('User Info: ', userForm);
             console.log('Shipping Info: ', shippingInfo);
             
@@ -146,10 +146,9 @@
             .then((data) => {
                 console.log('Success: ', data);
 
-                cart = {}
                 document.cookie = "cart=" + JSON.stringify(cart) + ";domain=;path=/"
-
                 window.location.href = "{% url 'checkout_session' %}"
+                // cart = {}                
             })
         }
     }

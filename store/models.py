@@ -14,6 +14,7 @@ class Product(models.Model):
     price = models.DecimalField(max_digits=7, decimal_places=2)
     brand = models.CharField(max_length=200, null=True)
     image = models.ImageField(null=True, blank=True)
+    price_id = models.CharField(max_length=200)
 
     def __str__(self) -> str:
         return self.name + ' ' + str(self.id)

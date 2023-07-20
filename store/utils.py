@@ -29,6 +29,7 @@ def guest_cart(request):
                     'price': product.price,
                     'brand': product.brand,
                     'imageURL': product.imageURL,
+                    'price_id': product.price_id,
                 },
                 'quantity': cart[i]['quantity'],
                 'get_total': total,
@@ -51,11 +52,13 @@ def cart_data(request):
         order, created = Order.objects.get_or_create(customer=customer, complete=False)        
         items = order.orderitem_set.all()
         cart_items = order.get_cart_items
+        print('Items when the user is logged in', items)
     else:
         guest_data = guest_cart(request)
         cart_items = guest_data['cart_items']
         order = guest_data['order']
         items = guest_data['items']
+        print('Items when the user is logged out', items)
 
     data = {
         'items': items, 
