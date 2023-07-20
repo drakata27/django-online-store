@@ -9,8 +9,8 @@ urlpatterns = [
     path('blog/', views.blog, name='blog'),
     path('about/', views.about, name='about'),
     path('contact/', views.contact, name='contact'),
-    path('update_item/', views.updateItem, name='update_item'),
-    path('process_order/', views.processOrder, name='process_order'),
+    path('update_item/', views.update_item, name='update_item'),
+    path('process_order/', views.process_order, name='process_order'),
     # stripe testing
     path('checkout_session/', views.checkout_session, name='checkout_session'),
 ]

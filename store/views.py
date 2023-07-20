@@ -39,22 +39,64 @@ def cart(request):
         }
     return render(request, 'store/cart.html', context )
 
+# def checkout(request):
+#     guest_data = cart_data(request)
+#     cart_items = guest_data['cart_items']
+#     order = guest_data['order']
+#     items = guest_data['items']
+
+#     context = {
+#         'items': items, 
+#         'order': order,
+#         'get_cart_items': 0,
+#         'cart_items': cart_items,
+#     }   
+#     return render(request, 'store/checkout.html', context)
+
 def checkout(request):
-    guest_data = cart_data(request)
-    cart_items = guest_data['cart_items']
-    order = guest_data['order']
-    items = guest_data['items']
+    DOMAIN = 'http://' + os.getenv('HOST_AND_PORT') + '/'
+    stripe.api_key=settings.STRIPE_SECRET_KEY
+    line_items = []
 
-    context = {
-        'items': items, 'order': order,
-        'get_cart_items': 0,
-        'cart_items': cart_items,
-    }
-    
+    if request.user.is_authenticated:
+        customer = request.user.customer
+        order, created = Order.objects.get_or_create(customer=customer, complete=False)        
+        items = order.orderitem_set.all()
         
-    return render(request, 'store/checkout.html', context)
+        for item in items:
+            product = item.product
+            quantity = item.quantity
+            line_item = {
+                'price': product.price_id,
+                'quantity': quantity,
+            }
+            line_items.append(line_item)
+    else:
+        gues_data = cart_data(request)
+        items = gues_data['items']
+    
+        for item in items:
+            product = item['product']
+            quantity = item['quantity']
+            line_item = {
+                'price': product['price_id'],
+                'quantity': quantity,
+            }
+            line_items.append(line_item)
 
-def updateItem(request):
+    checkout_session = stripe.checkout.Session.create(
+            payment_method_types=['card'],
+            line_items=line_items,
+            mode='payment',
+            success_url=DOMAIN,  
+            cancel_url=DOMAIN + '/cart',
+    )
+
+    
+     
+    return redirect(checkout_session.url, code=303)
+
+def update_item(request):
     data = json.loads(request.body)
     productId = data['productId']
     action = data['action']
@@ -81,7 +123,7 @@ def updateItem(request):
     return JsonResponse('Item was updated', safe=False)
 
 
-def processOrder(request):
+def process_order(request):
     transaction_id = datetime.datetime.now().timestamp()
     data = json.loads(request.body)
 
@@ -157,33 +199,34 @@ def contact(request):
     return render(request, 'store/contact.html', context)
 
 def checkout_session(request):
-    data = cart_data(request)
-    items = data['items']
+    pass
+    # data = cart_data(request)
+    # items = data['items']
 
-    DOMAIN = 'http://' + os.getenv('HOST_AND_PORT') + '/'
-    stripe.api_key=settings.STRIPE_SECRET_KEY
+    # DOMAIN = 'http://' + os.getenv('HOST_AND_PORT') + '/'
+    # stripe.api_key=settings.STRIPE_SECRET_KEY
 
-    line_items = []
+    # line_items = []
     
-    for item in items:
-        product = item['product']
-        quantity = item['quantity']
-        line_item = {
-            'price': product['price_id'],
-            'quantity': quantity,
-        }
-        line_items.append(line_item)
+    # for item in items:
+    #     product = item['product']
+    #     quantity = item['quantity']
+    #     line_item = {
+    #         'price': product['price_id'],
+    #         'quantity': quantity,
+    #     }
+    #     line_items.append(line_item)
     
-    if not line_items:
-        print('Line Items',line_items)
-        return redirect('cart')
+    # if not line_items:
+    #     print('Line Items',line_items)
+    #     return redirect('cart')
 
-    checkout_session = stripe.checkout.Session.create(
-            payment_method_types=['card'],
-            line_items=line_items,
-            mode='payment',
-            success_url=DOMAIN,  
-            cancel_url=DOMAIN,
-        )
+    # checkout_session = stripe.checkout.Session.create(
+    #         payment_method_types=['card'],
+    #         line_items=line_items,
+    #         mode='payment',
+    #         success_url=DOMAIN,  
+    #         cancel_url=DOMAIN + '/checkout',
+    #     )
     
-    return redirect(checkout_session.url, code=303)
+    # return redirect(checkout_session.url, code=303)
