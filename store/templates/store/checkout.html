@@ -37,12 +37,12 @@
         <div class="hidden payment-container" id="payment-info">
             <hr>
             <p>Payment</p>
-            <!-- <button id="make-payment" class="normal">Pay</button> -->
-            <!-- <form method="POST">
+            <form method="POST">
                 {% csrf_token %}
                 <button type="submit" id="make-payment" class="normal"><a href="{% url 'checkout_session' %}">Pay</a></button>
-            </form> -->
-            <button id="make-payment" class="normal">Pay</button>
+            </form>
+            <!-- <button id="make-payment" class="normal">Pay</button> -->
+            <!-- <button><a href="{% url 'checkout_session' %}" class="normal" id="make-payment">Pay</a></button> -->
         </div>
     </div>
     <!-- End Form Container -->
@@ -108,7 +108,6 @@
         })
 
         function submitForm(){
-            
             var userForm = {
                 'name':null,
                 'email':null,
@@ -130,10 +129,8 @@
             shippingInfo.city = form.city.value
             shippingInfo.postcode = form.postcode.value
             
-            console.log('User Info: ', userForm);
-            console.log('Shipping Info: ', shippingInfo);
-            
             var url = '/process_order/'
+
             fetch(url, {
                 method: 'POST',
                 headers: {
@@ -146,9 +143,9 @@
             .then((data) => {
                 console.log('Success: ', data);
 
+                cart = {}         
                 document.cookie = "cart=" + JSON.stringify(cart) + ";domain=;path=/"
                 window.location.href = "{% url 'checkout_session' %}"
-                cart = {}                
             })
         }
     }
