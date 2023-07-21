@@ -197,71 +197,71 @@ def contact(request):
     return render(request, 'store/contact.html', context)
 
 def checkout_session(request):
-    data = cart_data(request)
-    items = data['items']
-
-    DOMAIN = 'http://' + os.getenv('HOST_AND_PORT') + '/'
-    stripe.api_key=settings.STRIPE_SECRET_KEY
-
-    line_items = []
-    
-    for item in items:
-        product = item['product']
-        quantity = item['quantity']
-        line_item = {
-            'price': product['price_id'],
-            'quantity': quantity,
-        }
-        line_items.append(line_item)
-    
-    if not line_items:
-        print('Line Items',line_items)
-        return redirect('cart')
-
-    checkout_session = stripe.checkout.Session.create(
-            payment_method_types=['card'],
-            line_items=line_items,
-            mode='payment',
-            success_url=DOMAIN,  
-            cancel_url=DOMAIN + '/checkout',
-        )
+    # data = cart_data(request)
+    # items = data['items']
 
     # DOMAIN = 'http://' + os.getenv('HOST_AND_PORT') + '/'
     # stripe.api_key=settings.STRIPE_SECRET_KEY
-    # line_items = []
 
-    # if request.user.is_authenticated:
-    #     customer = request.user.customer
-    #     order, created = Order.objects.get_or_create(customer=customer, complete=False)        
-    #     items = order.orderitem_set.all()
-        
-    #     for item in items:
-    #         product = item.product
-    #         quantity = item.quantity
-    #         line_item = {
-    #             'price': product.price_id,
-    #             'quantity': quantity,
-    #         }
-    #         line_items.append(line_item)
-    # else:
-    #     guest_data = cart_data(request)
-    #     items = guest_data['items']
+    # line_items = []
     
-    #     for item in items:
-    #         product = item['product']
-    #         quantity = item['quantity']
-    #         line_item = {
-    #             'price': product['price_id'],
-    #             'quantity': quantity,
-    #         }
-    #         line_items.append(line_item)
+    # for item in items:
+    #     product = item['product']
+    #     quantity = item['quantity']
+    #     line_item = {
+    #         'price': product['price_id'],
+    #         'quantity': quantity,
+    #     }
+    #     line_items.append(line_item)
+    
+    # if not line_items:
+    #     print('Line Items',line_items)
+    #     return redirect('cart')
 
     # checkout_session = stripe.checkout.Session.create(
     #         payment_method_types=['card'],
     #         line_items=line_items,
     #         mode='payment',
     #         success_url=DOMAIN,  
-    #         cancel_url=DOMAIN + '/cart',
-    #     ) 
+    #         cancel_url=DOMAIN + '/checkout',
+    #     )
+
+    DOMAIN = 'http://' + os.getenv('HOST_AND_PORT') + '/'
+    stripe.api_key=settings.STRIPE_SECRET_KEY
+    line_items = []
+
+    if request.user.is_authenticated:
+        customer = request.user.customer
+        order, created = Order.objects.get_or_create(customer=customer, complete=False)        
+        items = order.orderitem_set.all()
+        
+        for item in items:
+            product = item.product
+            quantity = item.quantity
+            line_item = {
+                'price': product.price_id,
+                'quantity': quantity,
+            }
+            line_items.append(line_item)
+    else:
+        guest_data = cart_data(request)
+        items = guest_data['items']
+    
+        for item in items:
+            product = item['product']
+            quantity = item['quantity']
+            line_item = {
+                'price': product['price_id'],
+                'quantity': quantity,
+            }
+            line_items.append(line_item)
+
+    checkout_session = stripe.checkout.Session.create(
+            payment_method_types=['card'],
+            line_items=line_items,
+            mode='payment',
+            success_url=DOMAIN,  
+            cancel_url=DOMAIN + '/cart',
+        ) 
     
     return redirect(checkout_session.url, code=303)
