@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from . models import *
 import datetime
 import json
@@ -10,6 +10,8 @@ from dotenv import load_dotenv
 import os
 
 load_dotenv()
+# stripe.api_key=settings.STRIPE_SECRET_KEY
+stripe.api_key='sk_test_51NNFfKKEjjyTT4MxJbhTU41HjnIKGGlwDdySTPbpkvnBRL3AKhKZtEY33XlhUKKl8mymM1UARUVy2tnZg5O6akxf00TrEnTa9q'
 
 def home(request):
     featured_products = Product.objects.filter(image__istartswith='f')
@@ -53,47 +55,6 @@ def checkout(request):
     }   
     return render(request, 'store/checkout.html', context)
 
-# def checkout(request):
-#     DOMAIN = 'http://' + os.getenv('HOST_AND_PORT') + '/'
-#     stripe.api_key=settings.STRIPE_SECRET_KEY
-#     line_items = []
-
-#     if request.user.is_authenticated:
-#         customer = request.user.customer
-#         order, created = Order.objects.get_or_create(customer=customer, complete=False)        
-#         items = order.orderitem_set.all()
-        
-#         for item in items:
-#             product = item.product
-#             quantity = item.quantity
-#             line_item = {
-#                 'price': product.price_id,
-#                 'quantity': quantity,
-#             }
-#             line_items.append(line_item)
-#     else:
-#         gues_data = cart_data(request)
-#         items = gues_data['items']
-    
-#         for item in items:
-#             product = item['product']
-#             quantity = item['quantity']
-#             line_item = {
-#                 'price': product['price_id'],
-#                 'quantity': quantity,
-#             }
-#             line_items.append(line_item)
-
-#     checkout_session = stripe.checkout.Session.create(
-#             payment_method_types=['card'],
-#             line_items=line_items,
-#             mode='payment',
-#             success_url=DOMAIN,  
-#             cancel_url=DOMAIN + '/cart',
-#     ) 
-     
-#     return redirect(checkout_session.url, code=303)
-
 def update_item(request):
     data = json.loads(request.body)
     productId = data['productId']
@@ -121,37 +82,37 @@ def update_item(request):
     return JsonResponse('Item was updated', safe=False)
 
 
-def process_order(request):
-    transaction_id = datetime.datetime.now().timestamp()
-    data = json.loads(request.body)
+# def process_order(request):
+#     transaction_id = datetime.datetime.now().timestamp()
+#     data = json.loads(request.body)
 
-    if request.user.is_authenticated:
-        customer = request.user.customer
-        order, created = Order.objects.get_or_create(customer=customer, complete=False)
-    else:
-        customer, order = guest_order(request, data)
+#     if request.user.is_authenticated:
+#         customer = request.user.customer
+#         order, created = Order.objects.get_or_create(customer=customer, complete=False)
+#     else:
+#         customer, order = guest_order(request, data)
 
-    total = float(data['form']['total'])
-    order.transaction_id = transaction_id 
+#     total = float(data['form']['total'])
+#     order.transaction_id = transaction_id 
 
-    if total == float(order.get_cart_total):
-        order.complete=True
-        request.session['cart'] = {}
-        print('Order is completed')
-    else:
-        print('Order is NOT completed')
-    order.save()
+#     if total == float(order.get_cart_total):
+#         order.complete=True
+#         request.session['cart'] = {}
+#         print('Order is completed')
+#     else:
+#         print('Order is NOT completed')
+#     order.save()
 
 
-    ShippingAddress.objects.create(
-            customer=customer,
-            order=order,
-            address = data['shipping']['address'],
-            city = data['shipping']['city'],
-            postcode = data['shipping']['postcode'],
-    )
+#     ShippingAddress.objects.create(
+#             customer=customer,
+#             order=order,
+#             address = data['shipping']['address'],
+#             city = data['shipping']['city'],
+#             postcode = data['shipping']['postcode'],
+#     )
 
-    return JsonResponse('Payment submitted...', safe=False)
+#     return JsonResponse('Payment submitted...', safe=False)
 
 def shop(request):
     featured_products = Product.objects.filter(image__istartswith='f')
@@ -197,37 +158,7 @@ def contact(request):
     return render(request, 'store/contact.html', context)
 
 def checkout_session(request):
-    # data = cart_data(request)
-    # items = data['items']
-
-    # DOMAIN = 'http://' + os.getenv('HOST_AND_PORT') + '/'
-    # stripe.api_key=settings.STRIPE_SECRET_KEY
-
-    # line_items = []
-    
-    # for item in items:
-    #     product = item['product']
-    #     quantity = item['quantity']
-    #     line_item = {
-    #         'price': product['price_id'],
-    #         'quantity': quantity,
-    #     }
-    #     line_items.append(line_item)
-    
-    # if not line_items:
-    #     print('Line Items',line_items)
-    #     return redirect('cart')
-
-    # checkout_session = stripe.checkout.Session.create(
-    #         payment_method_types=['card'],
-    #         line_items=line_items,
-    #         mode='payment',
-    #         success_url=DOMAIN,  
-    #         cancel_url=DOMAIN + '/checkout',
-    #     )
-
     DOMAIN = 'http://' + os.getenv('HOST_AND_PORT') + '/'
-    stripe.api_key=settings.STRIPE_SECRET_KEY
     line_items = []
 
     if request.user.is_authenticated:
@@ -260,8 +191,44 @@ def checkout_session(request):
             payment_method_types=['card'],
             line_items=line_items,
             mode='payment',
-            success_url=DOMAIN,  
-            cancel_url=DOMAIN + '/cart',
+            success_url=DOMAIN,
+            cancel_url=DOMAIN + '/checkout',
+            # success_url=request.build_absolute_uri('/process_order/'),
+            # cancel_url=request.build_absolute_uri('/checkout/'),
         ) 
     
     return redirect(checkout_session.url, code=303)
+
+def process_order(request):
+    if request.method == 'POST':
+        transaction_id = datetime.datetime.now().timestamp()
+        data = json.loads(request.body)
+
+        if request.user.is_authenticated:
+            customer = request.user.customer
+            order, created = Order.objects.get_or_create(customer=customer, complete=False)
+        else:
+            customer, order = guest_order(request, data)
+
+        total = float(data['form']['total'])
+        order.transaction_id = transaction_id 
+
+        if total == float(order.get_cart_total):
+            order.complete=True
+            request.session['cart'] = {}
+            print('Order is completed')
+        else:
+            print('Order is NOT completed')
+        order.save()
+
+
+        ShippingAddress.objects.create(
+                customer=customer,
+                order=order,
+                address = data['shipping']['address'],
+                city = data['shipping']['city'],
+                postcode = data['shipping']['postcode'],
+        )
+        return JsonResponse('Payment submitted...', safe=False)
+    else:
+        return HttpResponse("Invalid request.")

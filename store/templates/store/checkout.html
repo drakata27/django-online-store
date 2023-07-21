@@ -37,12 +37,10 @@
         <div class="hidden payment-container" id="payment-info">
             <hr>
             <p>Payment</p>
-            <form method="POST">
+            <form action="{% url 'checkout_session' %}" method="POST">
                 {% csrf_token %}
-                <button type="submit" id="make-payment" class="normal"><a href="{% url 'checkout_session' %}">Pay</a></button>
+                <button type="submit" id="make-payment" class="normal">Pay</button>
             </form>
-            <!-- <button id="make-payment" class="normal">Pay</button> -->
-            <!-- <button><a href="{% url 'checkout_session' %}" class="normal" id="make-payment">Pay</a></button> -->
         </div>
     </div>
     <!-- End Form Container -->
@@ -79,8 +77,6 @@
 </div>
 
 <!-- Scripts -->
-<script src="https://js.stripe.com/v3/"></script>
-
 <script>
     var form = document.getElementById('form')
     var submitBtn = document.getElementById('submit-btn')
@@ -132,7 +128,7 @@
             shippingInfo.postcode = form.postcode.value
             
             var url = '/process_order/'
-
+            
             fetch(url, {
                 method: 'POST',
                 headers: {
@@ -144,10 +140,9 @@
             .then((response) => response.json())
             .then((data) => {
                 console.log('Success: ', data);
-
-                cart = {}         
+                
+                cart = {}
                 document.cookie = "cart=" + JSON.stringify(cart) + ";domain=;path=/"
-                window.location.href = "{% url 'checkout_session' %}"
             })
         }
     }
