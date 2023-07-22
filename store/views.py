@@ -81,39 +81,6 @@ def update_item(request):
 
     return JsonResponse('Item was updated', safe=False)
 
-
-# def process_order(request):
-#     transaction_id = datetime.datetime.now().timestamp()
-#     data = json.loads(request.body)
-
-#     if request.user.is_authenticated:
-#         customer = request.user.customer
-#         order, created = Order.objects.get_or_create(customer=customer, complete=False)
-#     else:
-#         customer, order = guest_order(request, data)
-
-#     total = float(data['form']['total'])
-#     order.transaction_id = transaction_id 
-
-#     if total == float(order.get_cart_total):
-#         order.complete=True
-#         request.session['cart'] = {}
-#         print('Order is completed')
-#     else:
-#         print('Order is NOT completed')
-#     order.save()
-
-
-#     ShippingAddress.objects.create(
-#             customer=customer,
-#             order=order,
-#             address = data['shipping']['address'],
-#             city = data['shipping']['city'],
-#             postcode = data['shipping']['postcode'],
-#     )
-
-#     return JsonResponse('Payment submitted...', safe=False)
-
 def shop(request):
     featured_products = Product.objects.filter(image__istartswith='f')
     new_products = Product.objects.filter(image__istartswith='n')
@@ -199,8 +166,109 @@ def checkout_session(request):
     
     return redirect(checkout_session.url, code=303)
 
-def process_order(request):
-    if request.method == 'POST':
+from django.views.decorators.csrf import csrf_exempt
+
+# @csrf_exempt
+# def webhook(request):
+#     payload = request.body
+#     event = None
+
+#     try:
+#         event = stripe.Event.construct_from(
+#             json.loads(payload), stripe.api_key
+#         )
+#         print('event created')
+#     except ValueError as e:
+#         return HttpResponse(status=400)
+
+#     if event.type == 'payment_intent.succeeded':
+#         payment_intent = event.data.object
+#         response = process_order(request, payment_intent)
+#         return response
+
+#     else:
+#         print('Unhandled event type {}'.format(event.type))
+
+#     return HttpResponse(status=200)
+
+# def process_order(request, payment_intent):
+#     event_type = payment_intent.get('type')
+#     if event_type == 'payment_intent.succeeded':
+#         # Handle payment_intent.succeeded event
+#         transaction_id = datetime.datetime.now().timestamp()
+#         data = json.loads(request.body)
+
+#         if request.user.is_authenticated:
+#             customer = request.user.customer
+#             order, created = Order.objects.get_or_create(customer=customer, complete=False)
+#         else:
+#             customer, order = guest_order(request, data)
+
+#         total = float(data['form']['total'])
+#         order.transaction_id = transaction_id
+
+#         if total == float(order.get_cart_total):
+#             order.complete = True
+#             request.session['cart'] = {}
+#             print('Order is completed')
+#         else:
+#             print('Order is NOT completed')
+#         order.save()
+
+#         ShippingAddress.objects.create(
+#             customer=customer,
+#             order=order,
+#             address=data['shipping']['address'],
+#             city=data['shipping']['city'],
+#             postcode=data['shipping']['postcode'],
+#         )
+
+#         return JsonResponse('Payment submitted...', safe=False)
+
+#     elif event_type == 'checkout.session.completed':
+#         # Handle checkout.session.completed event
+#         # This event is triggered when a Checkout Session is successfully completed by the customer
+#         # Here, you can update your order status or any other relevant action
+
+#         return JsonResponse('Checkout session completed', safe=False)
+
+#     else:
+#         # Handle other event types if needed
+#         print(f'Unhandled event type: {event_type}')
+
+#     return JsonResponse('Event processed', safe=False)
+
+@csrf_exempt
+def webhook(request):
+    payload = request.body
+    event = None
+
+    try:
+        event = stripe.Event.construct_from(
+            json.loads(payload), stripe.api_key
+        )
+    except ValueError as e:
+        return HttpResponse(status=400)
+
+    if event.type == 'payment_intent.succeeded':
+        payment_intent = event.data.object
+        response = process_order(request, payment_intent)
+        return response
+
+    elif event.type == 'checkout.session.completed':
+        checkout_session = event.data.object
+        payment_intent = stripe.PaymentIntent.retrieve(checkout_session.payment_intent)
+        response = process_order(request, payment_intent)
+        return response
+
+    else:
+        print('Unhandled event type {}'.format(event.type))
+        return HttpResponse(status=200)
+
+
+def process_order(request, payment_intent):
+    print('Processing order with payment_intent:', payment_intent)
+    if payment_intent.status == 'succeeded':
         transaction_id = datetime.datetime.now().timestamp()
         data = json.loads(request.body)
 
@@ -214,21 +282,21 @@ def process_order(request):
         order.transaction_id = transaction_id 
 
         if total == float(order.get_cart_total):
-            order.complete=True
+            order.complete = True
             request.session['cart'] = {}
             print('Order is completed')
         else:
             print('Order is NOT completed')
         order.save()
 
-
         ShippingAddress.objects.create(
-                customer=customer,
-                order=order,
-                address = data['shipping']['address'],
-                city = data['shipping']['city'],
-                postcode = data['shipping']['postcode'],
+            customer=customer,
+            order=order,
+            address=data['shipping']['address'],
+            city=data['shipping']['city'],
+            postcode=data['shipping']['postcode'],
         )
+
         return JsonResponse('Payment submitted...', safe=False)
     else:
-        return HttpResponse("Invalid request.")
+        return JsonResponse('Payment not successful', status=400)

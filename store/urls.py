@@ -13,4 +13,5 @@ urlpatterns = [
     path('process_order/', views.process_order, name='process_order'),
     # stripe testing
     path('checkout_session/', views.checkout_session, name='checkout_session'),
+    path('webhook/', views.webhook, name='webhook'),
 ]
