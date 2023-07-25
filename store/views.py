@@ -165,33 +165,6 @@ def checkout_session(request):
     
     return redirect(checkout_session.url, code=303)
 
-# @csrf_exempt
-# def webhook(request):
-#     payload = request.body
-#     sig_header = request.META['HTTP_STRIPE_SIGNATURE']
-#     event = None
-
-#     try:
-#         event = stripe.Webhook.construct_event(
-#         payload, sig_header, endpoint_secret
-#         )
-#     except ValueError as e:
-#         return HttpResponse(status=400)
-#     except stripe.error.SignatureVerificationError as e:
-#         return HttpResponse(status=400)
-    
-#     if event['type'] == 'checkout.session.completed':
-#         session = stripe.checkout.Session.retrieve(
-#         event['data']['object']['id'],
-#         expand=['line_items'],
-#         )
-
-#         line_items = session.line_items
-#         print(session)
-
-#     return HttpResponse(status=200)
-
-
 # def process_order(request):
 #     transaction_id = datetime.datetime.now().timestamp()
 #     data = json.loads(request.body)
@@ -247,13 +220,17 @@ def webhook(request):
         expand=['line_items'],
         )
 
-        customer, order = guest_order(request, data)
 
-        total = float(data['form']['total'])
-        order.transaction_id = transaction_id 
+        total = float(data['data']['object']['amount_total'])/100
+        customer, order = guest_order(request, data)
+        order.transaction_id = transaction_id
+
+        print('Total', total)
+        print('Order.get_cart_total', order.get_cart_total)
 
         if total == float(order.get_cart_total):
             order.complete = True
+            request.session['cart'] = {}
             print('Order is completed')
         else:
             print('Order is NOT completed')
@@ -262,10 +239,14 @@ def webhook(request):
         ShippingAddress.objects.create(
             customer=customer,
             order=order,
-            address=data['shipping']['address'],
-            city=data['shipping']['city'],
-            postcode=data['shipping']['postcode'],
+            address=data['data']['object']['customer_details']['address']['line1'],
+            city=data['data']['object']['customer_details']['address']['city'],
+            postcode=data['data']['object']['customer_details']['address']['postal_code'],
         )
+
         print(session)
-        
+        print("Data from the form: ", data)
+        print("Total:", total)
+        print("Order completed!")
+
     return HttpResponse(status=200)
