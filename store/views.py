@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import JsonResponse, HttpResponse
 from . models import *
 import datetime
+from django.views.decorators.csrf import csrf_exempt
 import json
 from . utils import *
 import stripe
@@ -10,8 +11,8 @@ from dotenv import load_dotenv
 import os
 
 load_dotenv()
-# stripe.api_key=settings.STRIPE_SECRET_KEY
-stripe.api_key='sk_test_51NNFfKKEjjyTT4MxJbhTU41HjnIKGGlwDdySTPbpkvnBRL3AKhKZtEY33XlhUKKl8mymM1UARUVy2tnZg5O6akxf00TrEnTa9q'
+stripe.api_key=settings.STRIPE_SECRET_KEY
+endpoint_secret=settings.STRIPE_WEBHOOK_KEY
 
 def home(request):
     featured_products = Product.objects.filter(image__istartswith='f')
@@ -160,143 +161,69 @@ def checkout_session(request):
             mode='payment',
             success_url=DOMAIN,
             cancel_url=DOMAIN + '/checkout',
-            # success_url=request.build_absolute_uri('/process_order/'),
-            # cancel_url=request.build_absolute_uri('/checkout/'),
         ) 
     
     return redirect(checkout_session.url, code=303)
 
-from django.views.decorators.csrf import csrf_exempt
-
-# @csrf_exempt
-# def webhook(request):
-#     payload = request.body
-#     event = None
-
-#     try:
-#         event = stripe.Event.construct_from(
-#             json.loads(payload), stripe.api_key
-#         )
-#         print('event created')
-#     except ValueError as e:
-#         return HttpResponse(status=400)
-
-#     if event.type == 'payment_intent.succeeded':
-#         payment_intent = event.data.object
-#         response = process_order(request, payment_intent)
-#         return response
-
-#     else:
-#         print('Unhandled event type {}'.format(event.type))
-
-#     return HttpResponse(status=200)
-
-# def process_order(request, payment_intent):
-#     event_type = payment_intent.get('type')
-#     if event_type == 'payment_intent.succeeded':
-#         # Handle payment_intent.succeeded event
-#         transaction_id = datetime.datetime.now().timestamp()
-#         data = json.loads(request.body)
-
-#         if request.user.is_authenticated:
-#             customer = request.user.customer
-#             order, created = Order.objects.get_or_create(customer=customer, complete=False)
-#         else:
-#             customer, order = guest_order(request, data)
-
-#         total = float(data['form']['total'])
-#         order.transaction_id = transaction_id
-
-#         if total == float(order.get_cart_total):
-#             order.complete = True
-#             request.session['cart'] = {}
-#             print('Order is completed')
-#         else:
-#             print('Order is NOT completed')
-#         order.save()
-
-#         ShippingAddress.objects.create(
-#             customer=customer,
-#             order=order,
-#             address=data['shipping']['address'],
-#             city=data['shipping']['city'],
-#             postcode=data['shipping']['postcode'],
-#         )
-
-#         return JsonResponse('Payment submitted...', safe=False)
-
-#     elif event_type == 'checkout.session.completed':
-#         # Handle checkout.session.completed event
-#         # This event is triggered when a Checkout Session is successfully completed by the customer
-#         # Here, you can update your order status or any other relevant action
-
-#         return JsonResponse('Checkout session completed', safe=False)
-
-#     else:
-#         # Handle other event types if needed
-#         print(f'Unhandled event type: {event_type}')
-
-#     return JsonResponse('Event processed', safe=False)
-
 @csrf_exempt
 def webhook(request):
     payload = request.body
+    sig_header = request.META['HTTP_STRIPE_SIGNATURE']
     event = None
 
     try:
-        event = stripe.Event.construct_from(
-            json.loads(payload), stripe.api_key
+        event = stripe.Webhook.construct_event(
+        payload, sig_header, endpoint_secret
         )
     except ValueError as e:
+        # Invalid payload
         return HttpResponse(status=400)
-
-    if event.type == 'payment_intent.succeeded':
-        payment_intent = event.data.object
-        response = process_order(request, payment_intent)
-        return response
-
-    elif event.type == 'checkout.session.completed':
-        checkout_session = event.data.object
-        payment_intent = stripe.PaymentIntent.retrieve(checkout_session.payment_intent)
-        response = process_order(request, payment_intent)
-        return response
-
-    else:
-        print('Unhandled event type {}'.format(event.type))
-        return HttpResponse(status=200)
-
-
-def process_order(request, payment_intent):
-    print('Processing order with payment_intent:', payment_intent)
-    if payment_intent.status == 'succeeded':
-        transaction_id = datetime.datetime.now().timestamp()
-        data = json.loads(request.body)
-
-        if request.user.is_authenticated:
-            customer = request.user.customer
-            order, created = Order.objects.get_or_create(customer=customer, complete=False)
-        else:
-            customer, order = guest_order(request, data)
-
-        total = float(data['form']['total'])
-        order.transaction_id = transaction_id 
-
-        if total == float(order.get_cart_total):
-            order.complete = True
-            request.session['cart'] = {}
-            print('Order is completed')
-        else:
-            print('Order is NOT completed')
-        order.save()
-
-        ShippingAddress.objects.create(
-            customer=customer,
-            order=order,
-            address=data['shipping']['address'],
-            city=data['shipping']['city'],
-            postcode=data['shipping']['postcode'],
+    except stripe.error.SignatureVerificationError as e:
+        # Invalid signature
+        return HttpResponse(status=400)
+    
+    # Handle the checkout.session.completed event
+    if event['type'] == 'checkout.session.completed':
+        # Retrieve the session. If you require line items in the response, you may include them by expanding line_items.
+        session = stripe.checkout.Session.retrieve(
+        event['data']['object']['id'],
+        expand=['line_items'],
         )
 
-        return JsonResponse('Payment submitted...', safe=False)
+        line_items = session.line_items
+        print(session)
+
+    # Passed signature verification
+    return HttpResponse(status=200)
+
+
+def process_order(request):
+    transaction_id = datetime.datetime.now().timestamp()
+    data = json.loads(request.body)
+
+    if request.user.is_authenticated:
+        customer = request.user.customer
+        order, created = Order.objects.get_or_create(customer=customer, complete=False)
     else:
-        return JsonResponse('Payment not successful', status=400)
+        customer, order = guest_order(request, data)
+
+    total = float(data['form']['total'])
+    order.transaction_id = transaction_id 
+
+    if total == float(order.get_cart_total):
+        order.complete = True
+        request.session['cart'] = {}
+        print('Order is completed')
+    else:
+        print('Order is NOT completed')
+    order.save()
+
+    ShippingAddress.objects.create(
+        customer=customer,
+        order=order,
+        address=data['shipping']['address'],
+        city=data['shipping']['city'],
+        postcode=data['shipping']['postcode'],
+    )
+
+    return JsonResponse('Payment submitted...', safe=False)
