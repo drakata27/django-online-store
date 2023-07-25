@@ -127,7 +127,8 @@
             shippingInfo.city = form.city.value
             shippingInfo.postcode = form.postcode.value
             
-            var url = '/process_order/'
+            // var url = '/process_order/'
+            var url = '/webhook/'
 
             fetch(url, {
                 method: 'POST',

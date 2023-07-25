@@ -165,65 +165,107 @@ def checkout_session(request):
     
     return redirect(checkout_session.url, code=303)
 
+# @csrf_exempt
+# def webhook(request):
+#     payload = request.body
+#     sig_header = request.META['HTTP_STRIPE_SIGNATURE']
+#     event = None
+
+#     try:
+#         event = stripe.Webhook.construct_event(
+#         payload, sig_header, endpoint_secret
+#         )
+#     except ValueError as e:
+#         return HttpResponse(status=400)
+#     except stripe.error.SignatureVerificationError as e:
+#         return HttpResponse(status=400)
+    
+#     if event['type'] == 'checkout.session.completed':
+#         session = stripe.checkout.Session.retrieve(
+#         event['data']['object']['id'],
+#         expand=['line_items'],
+#         )
+
+#         line_items = session.line_items
+#         print(session)
+
+#     return HttpResponse(status=200)
+
+
+# def process_order(request):
+#     transaction_id = datetime.datetime.now().timestamp()
+#     data = json.loads(request.body)
+
+#     if request.user.is_authenticated:
+#         customer = request.user.customer
+#         order, created = Order.objects.get_or_create(customer=customer, complete=False)
+#     else:
+#         customer, order = guest_order(request, data)
+
+#     total = float(data['form']['total'])
+#     order.transaction_id = transaction_id 
+
+#     if total == float(order.get_cart_total):
+#         order.complete = True
+#         request.session['cart'] = {}
+#         print('Order is completed')
+#     else:
+#         print('Order is NOT completed')
+#     order.save()
+
+#     ShippingAddress.objects.create(
+#         customer=customer,
+#         order=order,
+#         address=data['shipping']['address'],
+#         city=data['shipping']['city'],
+#         postcode=data['shipping']['postcode'],
+#     )
+
+#     return JsonResponse('Payment submitted...', safe=False)
+
 @csrf_exempt
 def webhook(request):
     payload = request.body
-    sig_header = request.META['HTTP_STRIPE_SIGNATURE']
+    sig_header = request.META.get('HTTP_STRIPE_SIGNATURE', None)
     event = None
+
+    transaction_id = datetime.datetime.now().timestamp()
+    data = json.loads(request.body)
 
     try:
         event = stripe.Webhook.construct_event(
-        payload, sig_header, endpoint_secret
+            payload, sig_header, endpoint_secret
         )
     except ValueError as e:
-        # Invalid payload
         return HttpResponse(status=400)
     except stripe.error.SignatureVerificationError as e:
-        # Invalid signature
         return HttpResponse(status=400)
     
-    # Handle the checkout.session.completed event
     if event['type'] == 'checkout.session.completed':
-        # Retrieve the session. If you require line items in the response, you may include them by expanding line_items.
         session = stripe.checkout.Session.retrieve(
         event['data']['object']['id'],
         expand=['line_items'],
         )
 
-        line_items = session.line_items
-        print(session)
-
-    # Passed signature verification
-    return HttpResponse(status=200)
-
-
-def process_order(request):
-    transaction_id = datetime.datetime.now().timestamp()
-    data = json.loads(request.body)
-
-    if request.user.is_authenticated:
-        customer = request.user.customer
-        order, created = Order.objects.get_or_create(customer=customer, complete=False)
-    else:
         customer, order = guest_order(request, data)
 
-    total = float(data['form']['total'])
-    order.transaction_id = transaction_id 
+        total = float(data['form']['total'])
+        order.transaction_id = transaction_id 
 
-    if total == float(order.get_cart_total):
-        order.complete = True
-        request.session['cart'] = {}
-        print('Order is completed')
-    else:
-        print('Order is NOT completed')
-    order.save()
+        if total == float(order.get_cart_total):
+            order.complete = True
+            print('Order is completed')
+        else:
+            print('Order is NOT completed')
+        order.save()
 
-    ShippingAddress.objects.create(
-        customer=customer,
-        order=order,
-        address=data['shipping']['address'],
-        city=data['shipping']['city'],
-        postcode=data['shipping']['postcode'],
-    )
-
-    return JsonResponse('Payment submitted...', safe=False)
+        ShippingAddress.objects.create(
+            customer=customer,
+            order=order,
+            address=data['shipping']['address'],
+            city=data['shipping']['city'],
+            postcode=data['shipping']['postcode'],
+        )
+        print(session)
+        
+    return HttpResponse(status=200)
