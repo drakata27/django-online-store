@@ -106,7 +106,7 @@
         })
 
         function submitForm(){
-            var userForm = {
+            /*var userForm = {
                 'name':null,
                 'email':null,
                 'total':total,
@@ -125,25 +125,7 @@
             
             shippingInfo.address = form.address.value
             shippingInfo.city = form.city.value
-            shippingInfo.postcode = form.postcode.value
-            
-            // var url = '/process_order/'
-            
-            // fetch(url, {
-                //     method: 'POST',
-                //     headers: {
-                    //         'Content-Type': 'application/json',
-                    //         'X-CSRFToken': csrftoken,
-                    //     },
-                    //     body: JSON.stringify({'form': userForm, 'shipping': shippingInfo})
-                    // })
-                    // .then((response) => response.json())
-                    // .then((data) => {
-                        //     console.log('Success: ', data);
-                        
-                        // cart = {}
-                        //     document.cookie = "cart=" + JSON.stringify(cart) + ";domain=;path=/"
-                        // })
+            shippingInfo.postcode = form.postcode.value*/
                         
             var url = '/webhook/'
             fetch(url, {
@@ -153,12 +135,13 @@
                         'X-CSRFToken': csrftoken,
                     },
                     body: JSON.stringify({'form': userForm, 'shipping': shippingInfo})
+                    //body: {}
                 })
                 .then((response) => response.json())
                 .then((data) => {
-                        console.log('Success: ', data);
-                        cart = {}
-                        document.cookie = "cart=" + JSON.stringify(cart) + ";domain=;path=/"
+                    cart = {}
+                    document.cookie = "cart=" + JSON.stringify(cart) + ";domain=;path=/"
+                    window.location.reload(); 
             })
         }
     }

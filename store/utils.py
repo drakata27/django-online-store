@@ -50,13 +50,6 @@ def cart_data(request):
     if request.user.is_authenticated:
         customer = request.user.customer
         order, created = Order.objects.get_or_create(customer=customer, complete=False)
-        # try:
-        #     # Get the single order for the authenticated user with complete=False
-        #     order = Order.objects.get(customer=customer, complete=False)
-        # except Order.DoesNotExist:
-        #     # If no order exists, create a new one
-        #     order = Order.objects.create(customer=customer, complete=False)
-
         items = order.orderitem_set.all()
         cart_items = order.get_cart_items
         print('Items when the user is logged in', items)
@@ -78,8 +71,6 @@ def cart_data(request):
 def guest_order(request, data):
     name = data['data']['object']['customer_details']['name']
     email = data['data']['object']['customer_details']['email']
-    # name = data['form']['name']
-    # email = data['form']['email']
 
     guest_data = guest_cart(request)
     items = guest_data['items']
@@ -95,6 +86,7 @@ def guest_order(request, data):
 
     for item in items:
         product = Product.objects.get(id=item['product']['id'])
+        print('ITEM',item)
 
         orderItem = OrderItem.objects.create(
             product=product,

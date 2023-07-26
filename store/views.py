@@ -165,37 +165,6 @@ def checkout_session(request):
     
     return redirect(checkout_session.url, code=303)
 
-# def process_order(request):
-#     transaction_id = datetime.datetime.now().timestamp()
-#     data = json.loads(request.body)
-
-#     if request.user.is_authenticated:
-#         customer = request.user.customer
-#         order, created = Order.objects.get_or_create(customer=customer, complete=False)
-#     else:
-#         customer, order = guest_order(request, data)
-
-#     total = float(data['form']['total'])
-#     order.transaction_id = transaction_id 
-
-#     if total == float(order.get_cart_total):
-#         order.complete = True
-#         request.session['cart'] = {}
-#         print('Order is completed')
-#     else:
-#         print('Order is NOT completed')
-#     order.save()
-
-#     ShippingAddress.objects.create(
-#         customer=customer,
-#         order=order,
-#         address=data['shipping']['address'],
-#         city=data['shipping']['city'],
-#         postcode=data['shipping']['postcode'],
-#     )
-
-#     return JsonResponse('Payment submitted...', safe=False)
-
 @csrf_exempt
 def webhook(request):
     payload = request.body
@@ -220,20 +189,15 @@ def webhook(request):
         expand=['line_items'],
         )
 
-
         total = float(data['data']['object']['amount_total'])/100
         customer, order = guest_order(request, data)
         order.transaction_id = transaction_id
 
         print('Total', total)
         print('Order.get_cart_total', order.get_cart_total)
+        print('Order', order)
 
-        if total == float(order.get_cart_total):
-            order.complete = True
-            request.session['cart'] = {}
-            print('Order is completed')
-        else:
-            print('Order is NOT completed')
+        order.complete = True
         order.save()
 
         ShippingAddress.objects.create(
@@ -245,8 +209,8 @@ def webhook(request):
         )
 
         print(session)
-        print("Data from the form: ", data)
-        print("Total:", total)
+        print('Data:',data)
         print("Order completed!")
+            
 
     return HttpResponse(status=200)
