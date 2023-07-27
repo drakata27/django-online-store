@@ -7,7 +7,6 @@ def guest_cart(request):
     except:
         cart = {}
 
-    print('Cart:',cart)
     items=[]
     order = {'get_cart_total':0, 'get_cart_items':0,}
     cart_items = order['get_cart_items']
@@ -43,7 +42,7 @@ def guest_cart(request):
         'order': order, 
         'cart_items': cart_items,
     }
-    
+    print('Cart:',cart)
     return guest_data
 
 def cart_data(request):
@@ -86,7 +85,6 @@ def guest_order(request, data):
 
     for item in items:
         product = Product.objects.get(id=item['product']['id'])
-        print('ITEM',item)
 
         orderItem = OrderItem.objects.create(
             product=product,

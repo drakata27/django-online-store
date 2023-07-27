@@ -207,10 +207,11 @@ def webhook(request):
             city=data['data']['object']['customer_details']['address']['city'],
             postcode=data['data']['object']['customer_details']['address']['postal_code'],
         )
-
+    
         print(session)
         print('Data:',data)
         print("Order completed!")
-            
+
+        return JsonResponse('Payment complete', safe=False)
 
     return HttpResponse(status=200)
