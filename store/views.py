@@ -190,7 +190,7 @@ def webhook(request):
         )
 
         total = float(data['data']['object']['amount_total'])/100
-        customer, order = guest_order(request, data)
+        customer, order = guest_order(request, data, session)
         order.transaction_id = transaction_id
 
         print('Total', total)
@@ -208,7 +208,7 @@ def webhook(request):
             postcode=data['data']['object']['customer_details']['address']['postal_code'],
         )
     
-        print(session)
+        print('Session: ',session)
         print('Data:',data)
         print("Order completed!")
 

@@ -67,12 +67,13 @@ def cart_data(request):
     
     return data
 
-def guest_order(request, data):
+def guest_order(request, data, session):
     name = data['data']['object']['customer_details']['name']
     email = data['data']['object']['customer_details']['email']
 
     guest_data = guest_cart(request)
-    items = guest_data['items']
+    # items = guest_data['items']
+    items = session['line_items']['data']
 
     customer, created = Customer.objects.get_or_create(email=email,)
     customer.name = name
@@ -83,8 +84,9 @@ def guest_order(request, data):
         complete=False,
     )
 
+    print('items, ',items)
     for item in items:
-        product = Product.objects.get(id=item['product']['id'])
+        product = Product.objects.get(price_id=item['price']['id'])
 
         orderItem = OrderItem.objects.create(
             product=product,
