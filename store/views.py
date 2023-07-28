@@ -161,6 +161,9 @@ def checkout_session(request):
             mode='payment',
             success_url=DOMAIN,
             cancel_url=DOMAIN + '/checkout',
+            shipping_address_collection={
+                'allowed_countries': ['GB','BG'],
+            },
         ) 
     
     return redirect(checkout_session.url, code=303)
@@ -190,7 +193,7 @@ def webhook(request):
         )
 
         total = float(data['data']['object']['amount_total'])/100
-        customer, order = guest_order(request, data, session)
+        customer, order = guest_order(data, session)
         order.transaction_id = transaction_id
 
         print('Total', total)
