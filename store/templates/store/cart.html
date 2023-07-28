@@ -86,11 +86,11 @@
                 </tr>
               </table>
       
-              <!--<button class="normal"><a href="{% url 'checkout' %}">Proceed to checkout</a></button>-->
               <form action="{% url 'checkout_session' %}" method="POST">
                 {% csrf_token %}
-                <button type="submit" id="make-payment" class="normal" style="color:white;">Proceed to checkout</button>
-              </form>
+                <button type="submit" id="proceed" class="normal" style="color:white;">Proceed to checkout</button>
+              </form> 
+              {% comment %} <button type="submit" id="make-payment" class="normal" style="color:white;">Proceed to checkout</button> {% endcomment %}
             </div>
       </section>
     {% endif %}

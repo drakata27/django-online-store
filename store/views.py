@@ -42,6 +42,7 @@ def cart(request):
         }
     return render(request, 'store/cart.html', context )
 
+# consider removing
 def checkout(request):
     guest_data = cart_data(request)
     cart_items = guest_data['cart_items']
@@ -125,6 +126,7 @@ def contact(request):
         }
     return render(request, 'store/contact.html', context)
 
+# needs refactoring
 def checkout_session(request):
     DOMAIN = 'http://' + os.getenv('HOST_AND_PORT') + '/'
     line_items = []
@@ -160,11 +162,12 @@ def checkout_session(request):
             line_items=line_items,
             mode='payment',
             success_url=DOMAIN,
-            cancel_url=DOMAIN + '/checkout',
+            cancel_url=DOMAIN + '/cart',
             shipping_address_collection={
                 'allowed_countries': ['GB','BG'],
             },
         ) 
+    
     
     return redirect(checkout_session.url, code=303)
 
@@ -196,9 +199,6 @@ def webhook(request):
         customer, order = guest_order(data, session)
         order.transaction_id = transaction_id
 
-        print('Total', total)
-        print('Order.get_cart_total', order.get_cart_total)
-        print('Order', order)
 
         order.complete = True
         order.save()
@@ -209,12 +209,13 @@ def webhook(request):
             address=data['data']['object']['customer_details']['address']['line1'],
             city=data['data']['object']['customer_details']['address']['city'],
             postcode=data['data']['object']['customer_details']['address']['postal_code'],
-        )
-    
+        )    
         print('Session: ',session)
         print('Data:',data)
+        print('Total', total)
         print("Order completed!")
 
-        return JsonResponse('Payment complete', safe=False)
+        # return JsonResponse('Payment complete', safe=False) # consider removing
+        return JsonResponse({'status': 'success', 'message': 'Payment complete'})
 
     return HttpResponse(status=200)
