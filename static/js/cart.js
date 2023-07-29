@@ -65,3 +65,47 @@ function updateUserOrder(productId, action){
         location.reload()
     })
 }
+
+// Clearing cart but it does not work
+var proceedBtn = document.getElementById('proceed')
+window.addEventListener("DOMContentLoaded", () => {
+    if (proceedBtn) {
+        console.log('Value is not null');
+        proceedBtn.addEventListener('submit', function(){
+            submit()
+            clearCartLocally()
+        })
+    } else {
+        console.log('Value is null');
+    }
+})
+
+function submit(){
+    console.log('Click');
+    var url = '/webhook/';
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrftoken,
+        },
+        body: {},
+    })
+    .then((response) => response.json())
+    .then((data) => {
+        if (data.status === 'success') {
+            clearCartLocally();
+            window.location.reload();
+        } else {
+            console.error('Payment failed. Error:', data.message);
+        }
+    })
+    .catch((error) => {
+        console.error('Error in fetch:', error);
+    });
+}
+
+function clearCartLocally() {
+    cart = {};
+    document.cookie = "cart=" + JSON.stringify(cart) + ";domain=;path=/";
+}

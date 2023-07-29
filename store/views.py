@@ -202,13 +202,13 @@ def webhook(request):
             address=data['data']['object']['customer_details']['address']['line1'],
             city=data['data']['object']['customer_details']['address']['city'],
             postcode=data['data']['object']['customer_details']['address']['postal_code'],
-        )    
+        ) 
+
         print('Session: ',session)
         print('Data:',data)
         print('Total', total)
         print("Order completed!")
 
-        # return JsonResponse('Payment complete', safe=False) # consider removing
         return JsonResponse({'status': 'success', 'message': 'Payment complete'})
 
     return HttpResponse(status=200)
