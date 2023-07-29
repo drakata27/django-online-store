@@ -42,21 +42,6 @@ def cart(request):
         }
     return render(request, 'store/cart.html', context )
 
-# consider removing
-def checkout(request):
-    guest_data = cart_data(request)
-    cart_items = guest_data['cart_items']
-    order = guest_data['order']
-    items = guest_data['items']
-
-    context = {
-        'items': items, 
-        'order': order,
-        'get_cart_items': 0,
-        'cart_items': cart_items,
-    }   
-    return render(request, 'store/checkout.html', context)
-
 def update_item(request):
     data = json.loads(request.body)
     productId = data['productId']
@@ -130,7 +115,8 @@ def contact(request):
 def checkout_session(request):
     DOMAIN = 'http://' + os.getenv('HOST_AND_PORT') + '/'
     line_items = []
-
+    
+    # refactor
     if request.user.is_authenticated:
         customer = request.user.customer
         order, created = Order.objects.get_or_create(customer=customer, complete=False)        
@@ -156,6 +142,7 @@ def checkout_session(request):
                 'quantity': quantity,
             }
             line_items.append(line_item)
+    # end refactoring
 
     checkout_session = stripe.checkout.Session.create(
             payment_method_types=['card'],
@@ -177,9 +164,6 @@ def webhook(request):
     sig_header = request.META.get('HTTP_STRIPE_SIGNATURE', None)
     event = None
 
-    transaction_id = datetime.datetime.now().timestamp()
-    data = json.loads(request.body)
-
     try:
         event = stripe.Webhook.construct_event(
             payload, sig_header, endpoint_secret
@@ -194,9 +178,18 @@ def webhook(request):
         event['data']['object']['id'],
         expand=['line_items'],
         )
+        # process order
+        transaction_id = datetime.datetime.now().timestamp()
+        data = json.loads(request.body)
 
+        if request.user.is_authenticated:
+            customer = request.user.customer
+            order, created = Order.objects.get_or_create(customer=customer, complete=False)
+        else:
+            customer, order = guest_order(data, session)
+        
+        
         total = float(data['data']['object']['amount_total'])/100
-        customer, order = guest_order(data, session)
         order.transaction_id = transaction_id
 
 
