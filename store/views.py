@@ -203,9 +203,6 @@ def webhook(request):
             city=data['data']['object']['customer_details']['address']['city'],
             postcode=data['data']['object']['customer_details']['address']['postal_code'],
         ) 
-
-        print('Session: ',session)
-        print('Data:',data)
         print('Total', total)
         print("Order completed!")
 

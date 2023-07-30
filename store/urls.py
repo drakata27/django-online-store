@@ -9,7 +9,7 @@ urlpatterns = [
     path('about/', views.about, name='about'),
     path('contact/', views.contact, name='contact'),
     path('update_item/', views.update_item, name='update_item'),
-    # stripe
+    # stripe 
     path('checkout_session/', views.checkout_session, name='checkout_session'),
     path('webhook/', views.webhook, name='webhook'),
 ]
