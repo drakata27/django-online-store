@@ -87,4 +87,11 @@
 
 <script src="{% static 'js/features.js' %}"></script>
 <script src="{% static 'js/textBanners.js' %}"></script>
+
+<script>
+  console.log("Cart Items:");
+    for (var productId in cart) {
+          console.log(productId)
+        }
+</script>
 {% endblock %}

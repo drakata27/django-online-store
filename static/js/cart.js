@@ -73,7 +73,6 @@ window.addEventListener("DOMContentLoaded", () => {
         console.log('Value is not null');
         proceedBtn.addEventListener('submit', function(){
             submit()
-            clearCartLocally()
         })
     } else {
         console.log('Value is null');
@@ -94,7 +93,6 @@ function submit(){
     .then((response) => response.json())
     .then((data) => {
         if (data.status === 'success') {
-            clearCartLocally();
             window.location.reload();
         } else {
             console.error('Payment failed. Error:', data.message);
@@ -103,9 +101,4 @@ function submit(){
     .catch((error) => {
         console.error('Error in fetch:', error);
     });
-}
-
-function clearCartLocally() {
-    cart = {};
-    document.cookie = "cart=" + JSON.stringify(cart) + ";domain=;path=/";
 }
