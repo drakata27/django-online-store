@@ -30,10 +30,10 @@ def home(request):
 
 
 def cart(request):
-    guest_data = cart_data(request)
-    cart_items = guest_data['cart_items']
-    order = guest_data['order']
-    items = guest_data['items']
+    data = cart_data(request)
+    cart_items = data['cart_items']
+    order = data['order']
+    items = data['items']
             
     context = {
         'items':items,
@@ -111,7 +111,7 @@ def contact(request):
         }
     return render(request, 'store/contact.html', context)
 
-# needs refactoring
+# TODO needs refactoring
 def checkout_session(request):
     DOMAIN = 'http://' + os.getenv('HOST_AND_PORT') + '/'
     line_items = []
@@ -182,6 +182,7 @@ def webhook(request):
         transaction_id = datetime.datetime.now().timestamp()
         data = json.loads(request.body)
 
+
         if request.user.is_authenticated:
             customer = request.user.customer
             order, created = Order.objects.get_or_create(customer=customer, complete=False)
@@ -202,7 +203,12 @@ def webhook(request):
             address=data['data']['object']['customer_details']['address']['line1'],
             city=data['data']['object']['customer_details']['address']['city'],
             postcode=data['data']['object']['customer_details']['address']['postal_code'],
-        ) 
+        )
+
+        # TEST
+        
+        # TEST
+
         print('Total', total)
         print("Order completed!")
 

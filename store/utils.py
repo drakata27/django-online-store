@@ -8,7 +8,10 @@ def guest_cart(request):
         cart = {}
 
     items=[]
-    order = {'get_cart_total':0, 'get_cart_items':0,}
+    order = {
+        'get_cart_total': 0,
+        'get_cart_items': 0,
+    }
     cart_items = order['get_cart_items']
 
     for i in cart:
@@ -42,7 +45,7 @@ def guest_cart(request):
         'order': order, 
         'cart_items': cart_items,
     }
-    print('Cart:',cart)
+
     return guest_data
 
 def cart_data(request):
@@ -51,13 +54,11 @@ def cart_data(request):
         order, created = Order.objects.get_or_create(customer=customer, complete=False)
         items = order.orderitem_set.all()
         cart_items = order.get_cart_items
-        print('Items when the user is logged in', items)
     else:
         guest_data = guest_cart(request)
         cart_items = guest_data['cart_items']
         order = guest_data['order']
         items = guest_data['items']
-        print('Items when the user is logged out', items)
 
     data = {
         'items': items, 
@@ -67,6 +68,7 @@ def cart_data(request):
     
     return data
 
+# TODO make this func the main one
 def guest_order(data, session):
     name = data['data']['object']['customer_details']['name']
     email = data['data']['object']['customer_details']['email']
@@ -81,7 +83,6 @@ def guest_order(data, session):
         complete=False,
     )
 
-    print('items, ',items)
     for item in items:
         product = Product.objects.get(price_id=item['price']['id'])
 
