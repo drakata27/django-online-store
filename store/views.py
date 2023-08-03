@@ -182,12 +182,7 @@ def webhook(request):
         transaction_id = datetime.datetime.now().timestamp()
         data = json.loads(request.body)
 
-
-        if request.user.is_authenticated:
-            customer = request.user.customer
-            order, created = Order.objects.get_or_create(customer=customer, complete=False)
-        else:
-            customer, order = guest_order(data, session)
+        customer, order = get_order(data, session)
         
         
         total = float(data['data']['object']['amount_total'])/100
@@ -204,10 +199,6 @@ def webhook(request):
             city=data['data']['object']['customer_details']['address']['city'],
             postcode=data['data']['object']['customer_details']['address']['postal_code'],
         )
-
-        # TEST
-        
-        # TEST
 
         print('Total', total)
         print("Order completed!")
