@@ -39,16 +39,13 @@ def cart(request):
         'items':items,
         'order': order, 
         'cart_items': cart_items,
-        }
+    }
     return render(request, 'store/cart.html', context )
 
 def update_item(request):
     data = json.loads(request.body)
     productId = data['productId']
     action = data['action']
-
-    print(productId)
-    print(action)
 
     customer = request.user.customer
     product = Product.objects.get(id=productId)
@@ -182,7 +179,12 @@ def webhook(request):
         transaction_id = datetime.datetime.now().timestamp()
         data = json.loads(request.body)
 
-        customer, order = get_order(data, session)
+        # TODO fix this
+        if request.user.is_authenticated:
+            customer = request.user.customer
+            order, created = Order.objects.get_or_create(customer=customer, complete=False)
+        else:
+            customer, order = guest_order(data, session)
         
         
         total = float(data['data']['object']['amount_total'])/100

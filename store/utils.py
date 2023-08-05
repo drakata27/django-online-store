@@ -68,8 +68,7 @@ def cart_data(request):
     
     return data
 
-# TODO make this func the main one
-def get_order(data, session):
+def guest_order(data, session):
     name = data['data']['object']['customer_details']['name']
     email = data['data']['object']['customer_details']['email']
     items = session['line_items']['data']
@@ -86,7 +85,7 @@ def get_order(data, session):
     for item in items:
         product = Product.objects.get(price_id=item['price']['id'])
 
-        OrderItem.objects.create(
+        order_item = OrderItem.objects.create(
             product=product,
             order=order,
             quantity=item['quantity'],
