@@ -54,7 +54,7 @@
     {% if order.get_cart_items == 0 %}
       <div style="margin: 10px; text-align:center;">
         <img class="empty-cart" src="{% static 'images/empty-cart.jpeg'%}" alt="cart is empty">
-        <h3>Add something to make me happy!</h1>
+        <h3><a href="{% url 'home' %}" style="color:black;">Add something to make me happy!</a></h1>
       </div>
     {% else %}
       <section id="cart-add" class="section-p1">

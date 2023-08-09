@@ -34,7 +34,7 @@ def cart(request):
     cart_items = data['cart_items']
     order = data['order']
     items = data['items']
-            
+       
     context = {
         'items':items,
         'order': order, 
@@ -61,7 +61,7 @@ def update_item(request):
     orderItem.save()
 
     if orderItem.quantity <= 0:
-        orderItem.delete()       
+        orderItem.delete()   
 
     return JsonResponse('Item was updated', safe=False)
 
@@ -193,6 +193,10 @@ def webhook(request):
 
         order.complete = True
         order.save()
+
+        # Get cart items associated with orders where complete=False
+        cart_items_to_delete = OrderItem.objects.filter(order__complete=False, order__customer=customer)
+        cart_items_to_delete.delete()
 
         ShippingAddress.objects.create(
             customer=customer,

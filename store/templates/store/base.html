@@ -73,7 +73,10 @@
             <li><a href="{% url 'blog' %}">Blog</a></li>
             <li><a href="{% url 'about' %}">About</a></li>
             <li><a href="{% url 'contact' %}">Contact</a></li>
-
+            
+            {% if user.is_authenticated %}
+            <li><a href="#">{{ user.username }}</a></li>
+            {% endif %}
             <div class="cart-container">
               <li><a href="{% url 'cart' %}" id="lg-bag"><i class="far fa-shopping-bag cart-icon"></i></a>
                 <p id="cart-total">{{cart_items}}</p>
