@@ -127,6 +127,18 @@ def checkout_session(request):
                 'quantity': quantity,
             }
             line_items.append(line_item)
+
+        checkout_session = stripe.checkout.Session.create(
+            payment_method_types=['card'],
+            line_items=line_items,
+            mode='payment',
+            success_url=DOMAIN,
+            cancel_url=DOMAIN + '/cart',
+            shipping_address_collection={
+                'allowed_countries': ['GB','BG'],
+            },
+            customer_email=customer.email,
+        ) 
     else:
         guest_data = cart_data(request)
         items = guest_data['items']
@@ -139,18 +151,17 @@ def checkout_session(request):
                 'quantity': quantity,
             }
             line_items.append(line_item)
-    # end refactoring
-
-    checkout_session = stripe.checkout.Session.create(
-            payment_method_types=['card'],
-            line_items=line_items,
-            mode='payment',
-            success_url=DOMAIN,
-            cancel_url=DOMAIN + '/cart',
-            shipping_address_collection={
-                'allowed_countries': ['GB','BG'],
-            },
-        ) 
+        # end refactoring
+        checkout_session = stripe.checkout.Session.create(
+                payment_method_types=['card'],
+                line_items=line_items,
+                mode='payment',
+                success_url=DOMAIN,
+                cancel_url=DOMAIN + '/cart',
+                shipping_address_collection={
+                    'allowed_countries': ['GB','BG'],
+                },
+            ) 
     
     
     return redirect(checkout_session.url, code=303)
@@ -197,7 +208,10 @@ def webhook(request):
         # Get cart items associated with orders where complete=False
         cart_items_to_delete = OrderItem.objects.filter(order__complete=False, order__customer=customer)
         cart_items_to_delete.delete()
-
+        
+        if request.user.is_authenticated:
+            order.get_cart_items = 0
+        
         ShippingAddress.objects.create(
             customer=customer,
             order=order,

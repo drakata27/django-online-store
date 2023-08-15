@@ -45,9 +45,6 @@ function addCookieItem(productId, action){
 }
 
 function updateUserOrder(productId, action){
-    console.log('User is authenticated');
-    console.log('Order was updated');
-
     var url = '/update_item/'
     fetch(url, {
         method: 'POST',
@@ -71,16 +68,17 @@ var proceedBtn = document.getElementById('proceed')
 window.addEventListener("DOMContentLoaded", () => {
     if (proceedBtn) {
         console.log('Value is not null');
-        proceedBtn.addEventListener('submit', function(){
-            submit()
+        proceedBtn.addEventListener('submit', function(e){
+            e.preventDefault()
+            submitOrder()
+            console.log('click');
         })
     } else {
         console.log('Value is null');
     }
 })
 
-function submit(){
-    console.log('Click');
+function submitOrder(){
     var url = '/webhook/';
     fetch(url, {
         method: 'POST',
@@ -93,6 +91,8 @@ function submit(){
     .then((response) => response.json())
     .then((data) => {
         if (data.status === 'success') {
+            console.log('Clearing cookie');
+            cart={}
             window.location.reload();
         } else {
             console.error('Payment failed. Error:', data.message);
