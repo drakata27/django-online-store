@@ -68,10 +68,14 @@ var proceedBtn = document.getElementById('proceed')
 window.addEventListener("DOMContentLoaded", () => {
     if (proceedBtn) {
         console.log('Value is not null');
-        proceedBtn.addEventListener('submit', function(e){
-            e.preventDefault()
+        proceedBtn.addEventListener('click', function(e){
+            // cart = {}
+            // window.location.reload();
+            // document.cookie = 'cart=' + JSON.stringify(cart) + ";domain=;path=/"
+            // e.stopPropagation();
+            // e.preventDefault()
+            console.log('submit');
             submitOrder()
-            console.log('click');
         })
     } else {
         console.log('Value is null');
@@ -86,19 +90,17 @@ function submitOrder(){
             'Content-Type': 'application/json',
             'X-CSRFToken': csrftoken,
         },
-        body: {},
+        body: JSON.stringify({}),
     })
     .then((response) => response.json())
-    .then((data) => {
-        if (data.status === 'success') {
-            console.log('Clearing cookie');
-            cart={}
-            window.location.reload();
-        } else {
-            console.error('Payment failed. Error:', data.message);
-        }
+    .then(() => {
+        console.log('Clearing cookie');
+        cart={}
+        document.cookie = 'cart=' + JSON.stringify(cart) + ";domain=;path=/" 
+        window.location.reload();
     })
     .catch((error) => {
         console.error('Error in fetch:', error);
     });
 }
+
