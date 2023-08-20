@@ -64,16 +64,26 @@ function updateUserOrder(productId, action){
 }
 
 // Clearing cart but it does not work
+// fix this
+var continueBtn = document.getElementById('continue')
+continueBtn.addEventListener('click', function(){
+    cart={}
+    window.location.reload();
+    document.cookie = 'cart=' + JSON.stringify(cart) + ";domain=;path=/" 
+    localStorage.removeItem('cart')
+    // cart = {}
+    // window.location.reload();
+    // document.cookie = 'cart=' + JSON.stringify(cart) + ";domain=;path=/"
+})
+
+
+
+
 var proceedBtn = document.getElementById('proceed')
 window.addEventListener("DOMContentLoaded", () => {
     if (proceedBtn) {
         console.log('Value is not null');
         proceedBtn.addEventListener('click', function(e){
-            // cart = {}
-            // window.location.reload();
-            // document.cookie = 'cart=' + JSON.stringify(cart) + ";domain=;path=/"
-            // e.stopPropagation();
-            // e.preventDefault()
             console.log('submit');
             submitOrder()
         })
@@ -90,7 +100,7 @@ function submitOrder(){
             'Content-Type': 'application/json',
             'X-CSRFToken': csrftoken,
         },
-        body: JSON.stringify({}),
+        body: JSON.stringify(),
     })
     .then((response) => response.json())
     .then(() => {

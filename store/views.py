@@ -14,6 +14,14 @@ load_dotenv()
 stripe.api_key=settings.STRIPE_SECRET_KEY
 endpoint_secret=settings.STRIPE_WEBHOOK_KEY
 
+def thank_you(request):
+    cart_items = 0
+        
+    context = {
+        'cart_items': cart_items,
+    }
+    return render(request, 'store/thank_you.html', context)
+
 def home(request):
     featured_products = Product.objects.filter(image__istartswith='f')
     new_products = Product.objects.filter(image__istartswith='n')
@@ -34,6 +42,7 @@ def cart(request):
     cart_items = data['cart_items']
     order = data['order']
     items = data['items']
+
        
     context = {
         'items':items,
@@ -43,7 +52,12 @@ def cart(request):
     return render(request, 'store/cart.html', context )
 
 def update_item(request):
-    data = json.loads(request.body)
+    try:
+        data = json.loads(request.body)
+    except json.JSONDecodeError as e:
+        print("JSON decoding error:", e)  # Debugging line
+        return JsonResponse('Invalid JSON data', status=400, safe=False)
+
     productId = data['productId']
     action = data['action']
 
@@ -156,7 +170,7 @@ def checkout_session(request):
                 payment_method_types=['card'],
                 line_items=line_items,
                 mode='payment',
-                success_url=DOMAIN,
+                success_url=DOMAIN + '/thank-you',
                 cancel_url=DOMAIN + '/cart',
                 shipping_address_collection={
                     'allowed_countries': ['GB','BG'],
@@ -197,10 +211,8 @@ def webhook(request):
         else:
             customer, order = guest_order(data, session)
         
-        
         total = float(data['data']['object']['amount_total'])/100
         order.transaction_id = transaction_id
-
 
         order.complete = True
         order.save()
@@ -220,6 +232,7 @@ def webhook(request):
             postcode=data['data']['object']['customer_details']['address']['postal_code'],
         )
 
+        print('data',data)
         print('Total', total)
         print("Order completed!")
 

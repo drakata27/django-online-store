@@ -8,7 +8,8 @@ urlpatterns = [
     path('blog/', views.blog, name='blog'),
     path('about/', views.about, name='about'),
     path('contact/', views.contact, name='contact'),
-    path('update_item/', views.update_item, name='update_item'),
+    path('update-item/', views.update_item, name='update_item'),
+    path('thank-you/', views.thank_you, name='thank_you'),
     # stripe 
     path('checkout_session/', views.checkout_session, name='checkout_session'),
     path('webhook/', views.webhook, name='webhook'),
