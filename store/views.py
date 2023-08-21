@@ -146,7 +146,7 @@ def checkout_session(request):
             payment_method_types=['card'],
             line_items=line_items,
             mode='payment',
-            success_url=DOMAIN,
+            success_url=DOMAIN + '/thank-you',
             cancel_url=DOMAIN + '/cart',
             shipping_address_collection={
                 'allowed_countries': ['GB','BG'],
@@ -176,7 +176,6 @@ def checkout_session(request):
                     'allowed_countries': ['GB','BG'],
                 },
             ) 
-    
     
     return redirect(checkout_session.url, code=303)
 

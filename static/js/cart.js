@@ -62,28 +62,27 @@ function updateUserOrder(productId, action){
         location.reload()
     })
 }
-
-// Clearing cart but it does not work
-// fix this
+// clearing the cart
 var continueBtn = document.getElementById('continue')
-continueBtn.addEventListener('click', function(){
-    cart={}
-    window.location.reload();
-    document.cookie = 'cart=' + JSON.stringify(cart) + ";domain=;path=/" 
-    localStorage.removeItem('cart')
-    // cart = {}
-    // window.location.reload();
-    // document.cookie = 'cart=' + JSON.stringify(cart) + ";domain=;path=/"
+window.addEventListener("DOMContentLoaded", () => {
+    if(continueBtn){
+        continueBtn.addEventListener('click', function(){
+            console.log('button is pressed');
+            cart={}
+            document.cookie = 'cart=' + JSON.stringify(cart) + ";domain=;path=/" 
+            window.location.reload();
+        })
+    } else {
+        console.log('Value is null');
+    }
 })
-
-
 
 
 var proceedBtn = document.getElementById('proceed')
 window.addEventListener("DOMContentLoaded", () => {
     if (proceedBtn) {
         console.log('Value is not null');
-        proceedBtn.addEventListener('click', function(e){
+        proceedBtn.addEventListener('click', function(){
             console.log('submit');
             submitOrder()
         })

@@ -1,7 +1,21 @@
-{% extends 'store/base.html' %}
+<!DOCTYPE html>
 {% load static %}
+<html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"/>
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <title>Thank You</title>
+    </head>
+    <body>
+        <h1 class="thank-you-message">Thank you for your purchase!</h1>
+        <div class='thank-you-div'>
+            <button id="continue" class="normal"><a href="{% url 'home' %}">Continue</a></button>
+        </div>    
+    </body>
+</html>
 
-{% block content %}
-<h1>Thank you</h1>
-<button><a href="{% url 'home' %}">Continue</a></button>
-{% endblock %}
+
