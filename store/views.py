@@ -52,12 +52,7 @@ def cart(request):
     return render(request, 'store/cart.html', context )
 
 def update_item(request):
-    try:
-        data = json.loads(request.body)
-    except json.JSONDecodeError as e:
-        print("JSON decoding error:", e)  # Debugging line
-        return JsonResponse('Invalid JSON data', status=400, safe=False)
-
+    data = json.loads(request.body)
     productId = data['productId']
     action = data['action']
 

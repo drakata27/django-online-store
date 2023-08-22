@@ -45,7 +45,7 @@ function addCookieItem(productId, action){
 }
 
 function updateUserOrder(productId, action){
-    var url = '/update_item/'
+    var url = '/update-item/'
     fetch(url, {
         method: 'POST',
         headers: {
@@ -62,54 +62,14 @@ function updateUserOrder(productId, action){
         location.reload()
     })
 }
-// clearing the cart
+
 var continueBtn = document.getElementById('continue')
 window.addEventListener("DOMContentLoaded", () => {
     if(continueBtn){
         continueBtn.addEventListener('click', function(){
-            console.log('button is pressed');
             cart={}
             document.cookie = 'cart=' + JSON.stringify(cart) + ";domain=;path=/" 
             window.location.reload();
         })
-    } else {
-        console.log('Value is null');
     }
 })
-
-
-var proceedBtn = document.getElementById('proceed')
-window.addEventListener("DOMContentLoaded", () => {
-    if (proceedBtn) {
-        console.log('Value is not null');
-        proceedBtn.addEventListener('click', function(){
-            console.log('submit');
-            submitOrder()
-        })
-    } else {
-        console.log('Value is null');
-    }
-})
-
-function submitOrder(){
-    var url = '/webhook/';
-    fetch(url, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': csrftoken,
-        },
-        body: JSON.stringify(),
-    })
-    .then((response) => response.json())
-    .then(() => {
-        console.log('Clearing cookie');
-        cart={}
-        document.cookie = 'cart=' + JSON.stringify(cart) + ";domain=;path=/" 
-        window.location.reload();
-    })
-    .catch((error) => {
-        console.error('Error in fetch:', error);
-    });
-}
-
