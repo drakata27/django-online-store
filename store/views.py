@@ -122,7 +122,6 @@ def checkout_session(request):
     DOMAIN = 'http://' + os.getenv('HOST_AND_PORT') + '/'
     line_items = []
     
-    # refactor
     if request.user.is_authenticated:
         customer = request.user.customer
         order, created = Order.objects.get_or_create(customer=customer, complete=False)        
@@ -160,7 +159,6 @@ def checkout_session(request):
                 'quantity': quantity,
             }
             line_items.append(line_item)
-        # end refactoring
         checkout_session = stripe.checkout.Session.create(
                 payment_method_types=['card'],
                 line_items=line_items,
@@ -170,8 +168,7 @@ def checkout_session(request):
                 shipping_address_collection={
                     'allowed_countries': ['GB','BG'],
                 },
-            ) 
-    
+            )
     return redirect(checkout_session.url, code=303)
 
 @csrf_exempt
