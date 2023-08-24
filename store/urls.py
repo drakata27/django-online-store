@@ -13,4 +13,6 @@ urlpatterns = [
     # stripe 
     path('checkout_session/', views.checkout_session, name='checkout_session'),
     path('webhook/', views.webhook, name='webhook'),
+    # user creation
+    path('signup', views.SignUpView.as_view(), name='signup'),
 ]

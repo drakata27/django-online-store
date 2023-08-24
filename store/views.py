@@ -8,19 +8,15 @@ from . utils import *
 import stripe
 from django.conf import settings
 from dotenv import load_dotenv
+from django.views.generic import TemplateView
+from django.contrib.auth.views import LoginView, LogoutView
+from django.views.generic.edit import CreateView
+from django.contrib.auth.forms import UserCreationForm
 import os
 
 load_dotenv()
 stripe.api_key=settings.STRIPE_SECRET_KEY
 endpoint_secret=settings.STRIPE_WEBHOOK_KEY
-
-def thank_you(request):
-    cart_items = 0
-        
-    context = {
-        'cart_items': cart_items,
-    }
-    return render(request, 'store/thank_you.html', context)
 
 def home(request):
     featured_products = Product.objects.filter(image__istartswith='f')
@@ -117,7 +113,6 @@ def contact(request):
         }
     return render(request, 'store/contact.html', context)
 
-# TODO needs refactoring
 def checkout_session(request):
     DOMAIN = 'http://' + os.getenv('HOST_AND_PORT') + '/'
     line_items = []
@@ -141,6 +136,7 @@ def checkout_session(request):
             line_items=line_items,
             mode='payment',
             success_url=DOMAIN + '/thank-you',
+            # success_url=DOMAIN,
             cancel_url=DOMAIN + '/cart',
             shipping_address_collection={
                 'allowed_countries': ['GB','BG'],
@@ -230,3 +226,19 @@ def webhook(request):
         return JsonResponse({'status': 'success', 'message': 'Payment complete'})
 
     return HttpResponse(status=200)
+
+def thank_you(request):
+    cart_items = 0
+        
+    context = {
+        'cart_items': cart_items,
+    }
+    return render(request, 'store/thank_you.html', context)
+
+# Sign In, Sign Out and create account class-based views
+
+# TODO Make sure logged in users cannot sign up!
+class SignUpView(CreateView):
+    form_class = UserCreationForm
+    template_name = 'user_creation/signup.html'
+    success_url = ''
