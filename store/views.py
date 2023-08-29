@@ -236,9 +236,18 @@ def thank_you(request):
     return render(request, 'store/thank_you.html', context)
 
 # Sign In, Sign Out and create account class-based views
-
-# TODO Make sure logged in users cannot sign up!
+# TODO Fix template
 class SignUpView(CreateView):
     form_class = UserCreationForm
     template_name = 'user_creation/signup.html'
+    success_url = '/'
+
+
+class SignInView(LoginView):
+    template_name = 'user_creation/signin.html'
     success_url = ''
+
+class SignOutView(LogoutView):
+    success_url = ''
+
+
