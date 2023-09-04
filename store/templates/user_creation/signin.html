@@ -10,6 +10,10 @@
             <title>Sign In</title>
         </head>
         <body>
-            <h1>Sign In</h1>
+            <form method="POST" style="text-align: left; margin: 0 auto; width: 600px; margin-top: 220px;"> {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="generic-btn" >Sign In</button>
+                <a class="generic-btn" style="background-color: red;" href="{% url 'home' %}">Back</a>
+            </form>
     </body>
 </html>

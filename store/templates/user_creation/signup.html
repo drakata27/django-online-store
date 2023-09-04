@@ -10,10 +10,11 @@
             <title>Sign Up</title>
         </head>
         <body>
-            <form method="POST" class="sign-up-form" > 
+            <form method="POST" style="text-align: left; margin: 0 auto; width: 600px; margin-top: 220px;"> 
                 {% csrf_token %}
                 {{ form.as_p }}
-                <button type="submit" class="normal sign-up-btn">Sign Up</button>
+                <button type="submit" class="generic-btn">Sign Up</button>
+                <a class="generic-btn" style="background-color: red;" href="{% url 'home' %}">Back</a>
             </form>
     </body>
 </html>

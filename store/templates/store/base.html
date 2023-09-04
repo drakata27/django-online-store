@@ -75,7 +75,11 @@
             <li><a href="{% url 'contact' %}">Contact</a></li>
             
             {% if user.is_authenticated %}
-            <li><a href="#">{{ user.username }}</a></li>
+              <li><a href="#">{{ user.username }}</a></li>
+              <li><a href="{% url 'signout' %}" style="color: red;">Sign Out</a></li>
+            {% else %}
+              <li><a href="{% url 'signin' %}" style="color: #088178;">Sign In</a></li>
+              <li><a href="{% url 'signup' %}" style="color: #088178;">Sign Up</a></li>
             {% endif %}
             <div class="cart-container">
               <li><a href="{% url 'cart' %}" id="lg-bag"><i class="far fa-shopping-bag cart-icon"></i></a>

@@ -8,10 +8,10 @@ from . utils import *
 import stripe
 from django.conf import settings
 from dotenv import load_dotenv
-from django.views.generic import TemplateView
 from django.contrib.auth.views import LoginView, LogoutView
 from django.views.generic.edit import CreateView
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import login
 import os
 
 load_dotenv()
@@ -236,18 +236,52 @@ def thank_you(request):
     return render(request, 'store/thank_you.html', context)
 
 # Sign In, Sign Out and create account class-based views
+
 # TODO Fix template
+class SignInView(LoginView):
+    template_name = 'user_creation/signin.html'
+
+    def get(self, request, *args, **kwargs):
+        # Access the request object here
+        guest_data = cart_data(request)
+        cart_items = guest_data['cart_items']
+
+        # Perform other logic here
+
+        return super().get(request, *args, **kwargs)
+
+class SignOutView(LogoutView):
+    success_url = ''
+
+# TODO make the user specify email and name upon registration
 class SignUpView(CreateView):
     form_class = UserCreationForm
     template_name = 'user_creation/signup.html'
     success_url = '/'
 
+    def form_valid(self, form):
+        # Call the parent class's form_valid method to create the user
+        response = super().form_valid(form)
 
-class SignInView(LoginView):
-    template_name = 'user_creation/signin.html'
-    success_url = ''
+        # Create a customer profile and associate it with the user
+        user = self.object  # Get the newly created user
+        customer, created = Customer.objects.get_or_create(user=user)  # Create or get the customer profile
 
-class SignOutView(LogoutView):
-    success_url = ''
+        # You can also set any additional customer attributes here if needed
+
+        # Log the user in after successful registration
+        login(self.request, user)
+
+        return response
+    
+    # does not allow logged in users to access the sign up page
+    def get(self, request, *args, **kwargs):
+        if self.request.user.is_authenticated:
+            return redirect('home')
+        return super().get(request, *args, **kwargs)
+
+
+
+    
 
 
