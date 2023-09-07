@@ -11,6 +11,7 @@ from dotenv import load_dotenv
 from django.contrib.auth.views import LoginView, LogoutView
 from django.views.generic.edit import CreateView
 from django.contrib.auth.forms import UserCreationForm
+from .forms import *
 from django.contrib.auth import login
 import os
 
@@ -191,7 +192,6 @@ def webhook(request):
         transaction_id = datetime.datetime.now().timestamp()
         data = json.loads(request.body)
 
-        # TODO fix this
         if request.user.is_authenticated:
             customer = request.user.customer
             order, created = Order.objects.get_or_create(customer=customer, complete=False)
@@ -255,6 +255,7 @@ class SignOutView(LogoutView):
 
 # TODO make the user specify email and name upon registration
 class SignUpView(CreateView):
+    # form_class = CustomUserCreationForm
     form_class = UserCreationForm
     template_name = 'user_creation/signup.html'
     success_url = '/'
@@ -265,9 +266,8 @@ class SignUpView(CreateView):
 
         # Create a customer profile and associate it with the user
         user = self.object  # Get the newly created user
-        customer, created = Customer.objects.get_or_create(user=user)  # Create or get the customer profile
-
-        # You can also set any additional customer attributes here if needed
+        # TODO fix this
+        customer, created = Customer.objects.get_or_create(user=user, name='test', email='test')  # Create or get the customer profile
 
         # Log the user in after successful registration
         login(self.request, user)

@@ -5,9 +5,11 @@ class Customer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
     name = models.CharField(max_length=200, null=True)
     email = models.CharField(max_length=200, null=True)
+    
+    USERNAME_FIELD = 'email'
 
     # def __str__(self) -> str:
-    #     return self.user
+    #     return self.name
     
 class Product(models.Model):
     name = models.CharField(max_length=200, null=True)
