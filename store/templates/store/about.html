@@ -2,5 +2,43 @@
 {% load static %}
 
 {% block content %}
-<h1>About</h1>
-{% endblock %}
+<style>
+    #page-header.about-header {
+    background-image: url("{% static 'images/banner/banner.png' %}");
+  }
+</style>
+<!-- Hero Section -->
+<section id="page-header" class="about-header">
+    <h2>#KnowUs</h2>
+    <p>
+      Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nam, tempora?
+    </p>
+  </section>
+  <!-- end -->
+
+  <!-- About Section -->
+  <section id="about-head" class="section-p1">
+    <img src="{% static 'images/about/a6.jpg' %}" alt="" />
+    <div>
+      <h2>Who Are We?</h2>
+      <p>
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipit
+        placeat repellat labore voluptatibus veritatis aspernatur neque,
+        adipisci tempore ab eos voluptatum cupiditate, reprehenderit autem
+        dolor odit amet. Aut, consequuntur numquam.
+      </p>
+      <abbr title=" "
+        >Lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem,
+        dicta?</abbr
+      >
+      <br /><br />
+
+      <marquee bgcolor="#ccc" loop="-1" scrollamount="5" width="100%"
+        >Lorem ipsum dolor sit, amet consectetur adipisicing elit. Maxime,
+        commodi atque quas possimus reiciendis cum autem accusantium ipsum
+        quaerat vitae.</marquee
+      >
+    </div>
+  </section>
+  <!-- end -->
+  {% endblock %}

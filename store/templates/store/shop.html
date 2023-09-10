@@ -2,5 +2,31 @@
 {% load static %}
 
 {% block content %}
-<h1>Shop</h1>
+<style>
+   #page-header {
+    background-image: url("{% static 'images/banner/b1.jpg' %}");
+   }
+</style>
+
+<section id="page-header">
+    <h2>#stayhome</h2>
+    <p>Save more with coupons & up to 70% off!</p>
+</section>
+
+<!-- Products -->
+<section id="product1" class="section-p1">
+    <div class="pro-container">
+        {% for product in products %}
+        <div class="pro">
+            <img src="{{ product.imageURL }}" alt="" />
+            <div class="des">
+              <span>{{product.brand}}</span>
+              <h5>{{product.name}}</h5>
+              <h4>£{{product.price|floatformat:2}}</h4>
+            </div>
+            <button data-product={{product.id}} data-action="add" class="update-cart"><i class="fal fa-shopping-cart cart"></i></button>
+          </div>
+        {% endfor %}
+    </div>
+</section>
 {% endblock %}

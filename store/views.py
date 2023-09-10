@@ -72,8 +72,7 @@ def update_item(request):
     return JsonResponse('Item was updated', safe=False)
 
 def shop(request):
-    featured_products = Product.objects.filter(image__istartswith='f')
-    new_products = Product.objects.filter(image__istartswith='n')
+    products = Product.objects.all()
 
     guest_data = cart_data(request)
     cart_items = guest_data['cart_items']
@@ -81,20 +80,10 @@ def shop(request):
 
     context = {
         'items': items,
-        'featured_products': featured_products,
-        'new_products': new_products,
+        'products':products,
         'cart_items' : cart_items,
     }
     return render(request, 'store/shop.html', context)
-
-def blog(request):
-    guest_data = cart_data(request)
-    cart_items = guest_data['cart_items']
-        
-    context = {
-        'cart_items': cart_items,
-        }
-    return render(request, 'store/blog.html', context)
 
 def about(request):
     guest_data = cart_data(request)
@@ -267,7 +256,7 @@ class SignUpView(CreateView):
         # Create a customer profile and associate it with the user
         user = self.object  # Get the newly created user
         # TODO fix this
-        customer, created = Customer.objects.get_or_create(user=user, name='test')  # Create or get the customer profile
+        customer, created = Customer.objects.get_or_create(user=user, name=f'{user}', email=f'{user}@mail.com')  # Create or get the customer profile
 
         # Log the user in after successful registration
         login(self.request, user)

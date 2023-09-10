@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from .models import Customer
+from django.contrib.auth import authenticate,get_user_model
 
 class CustomUserCreationForm(UserCreationForm):
     name = forms.CharField(max_length=200, required=True, help_text='Required. Your full name.')
@@ -8,5 +9,5 @@ class CustomUserCreationForm(UserCreationForm):
 
     class Meta:
         model = Customer
-        # fields = UserCreationForm.Meta.fields + ('name', 'email')
+        fields = UserCreationForm.Meta.fields + ('name', 'email')
         fields = ('name', 'email', 'password1', 'password2')

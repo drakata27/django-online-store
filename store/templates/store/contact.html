@@ -2,5 +2,60 @@
 {% load static %}
 
 {% block content %}
-<h1>Contact</h1>
-{% endblock %}
+<style>
+    #page-header.about-header {
+    background-image: url("{% static 'images/banner/banner.png' %}");
+  }
+</style>
+
+<!-- Hero Section -->
+<section id="page-header" class="about-header">
+    <h2>#let's_talk</h2>
+    <p>LEAVE A MESSAGE, We love to hear from you!</p>
+  </section>
+  <!-- end -->
+
+  <!-- Contact Details Section -->
+  <section id="contact-details" class="section-p1">
+    <!-- details div -->
+    <div class="details">
+      <span>GET IN TOUCH</span>
+      <h2>Visit one of our agency locations or contact us today!</h2>
+      <h3>Head Office</h3>
+      <div>
+        <li>
+          <i class="fal fa-map"></i>
+          <p>56 Glassford Street Glasgow G1 1UL New York</p>
+        </li>
+        <li>
+          <i class="fal fa-envelope"></i>
+          <p>contact@example.com</p>
+        </li>
+        <li>
+          <i class="fal fa-phone-alt"></i>
+          <p>+44 7700 900838</p>
+        </li>
+        <li>
+          <i class="fal fa-clock"></i>
+          <p>Monday to Saturday: 9:00am to 4:00pm</p>
+        </li>
+      </div>
+    </div>
+    <!-- end -->
+
+    <!-- map div -->
+    <div class="map">
+      <iframe
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d79471.65584095249!2d-0.3467830463820857!3d51.504239662837826!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x487610e7f1c2ae73%3A0x764b205ace4e1b2!2sApple%20Brent%20Cross!5e0!3m2!1sen!2suk!4v1679058709093!5m2!1sen!2suk"
+        width="600"
+        height="450"
+        style="border: 0"
+        allowfullscreen=""
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+      ></iframe>
+    </div>
+    <!-- end -->
+  </section>
+  <!-- end -->
+  {% endblock %}
