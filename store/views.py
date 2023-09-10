@@ -210,6 +210,7 @@ def webhook(request):
         
         if request.user.is_authenticated:
             order.get_cart_items = 0
+            print('cart deleted')
         
         ShippingAddress.objects.create(
             customer=customer,
@@ -219,7 +220,6 @@ def webhook(request):
             postcode=data['data']['object']['customer_details']['address']['postal_code'],
         )
 
-        print('data',data)
         print('Total', total)
         print("Order completed!")
 
@@ -267,7 +267,7 @@ class SignUpView(CreateView):
         # Create a customer profile and associate it with the user
         user = self.object  # Get the newly created user
         # TODO fix this
-        customer, created = Customer.objects.get_or_create(user=user, name='test', email='test')  # Create or get the customer profile
+        customer, created = Customer.objects.get_or_create(user=user, name='test')  # Create or get the customer profile
 
         # Log the user in after successful registration
         login(self.request, user)
