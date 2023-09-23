@@ -73,3 +73,24 @@ window.addEventListener("DOMContentLoaded", () => {
         })
     }
 })
+
+// Script for navigation bar
+const bar = document.getElementById("bar");
+const close = document.getElementById("close");
+const nav = document.getElementById("navbar");
+const cartTotal = document.getElementById('cart-total')
+
+if (bar) {
+  bar.addEventListener("click", () => {
+    nav.classList.add("active");
+});
+}
+if (close) {
+    close.addEventListener("click", () => {
+        nav.classList.remove("active");
+  });
+
+}
+bar.addEventListener('click', ()=>{
+  cartTotal.classList.add('hide-elemenet')
+})
