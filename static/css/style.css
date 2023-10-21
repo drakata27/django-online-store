@@ -86,7 +86,7 @@ body {
   font-weight: 600;
   padding: 10px 30px;
   color: #fff;
-  background-color: #088178;
+  background-color: blue;
   border-radius: 4px;
   cursor: pointer;
   border: none;
@@ -101,7 +101,7 @@ body {
     align-items: center;
     justify-content: space-between;
     padding: 20px 80px;
-    background: #e3e6f3;
+    background: lightskyblue;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.06);
     z-index: 999;
     position: sticky;
@@ -116,7 +116,7 @@ body {
   }
 
   #hero button a {
-    color: #088178;
+    color: white;
   }
   
   /* Parent tag of  #navbar li a.active::after*/
@@ -134,7 +134,7 @@ body {
   }
   #navbar li a:hover,
   #navbar li a.active {
-    color: #088178;
+    color: blue;
   }
   
   #navbar li a.active::after,
@@ -142,7 +142,7 @@ body {
     content: "";
     width: 30%;
     height: 2px;
-    background: #088178;
+    background: blue;
     position: absolute;
     bottom: -4px;
     left: 20px;
@@ -163,6 +163,10 @@ body {
     display: none;
     align-items: center;
   }
+  .logo {
+    height: 40px;
+    width: 40px;
+  }
   /* End header */
 
   /* Footer Start */
@@ -171,7 +175,8 @@ footer {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    background-color:  #e3e6f3;
+    background: lightskyblue;
+
   }
   
   footer .col {
@@ -196,7 +201,7 @@ footer {
   footer a {
     font-size: 13px;
     text-decoration: none;
-    color: #222;
+    color: black;
     margin-bottom: 10px;
   }
   
@@ -210,7 +215,7 @@ footer {
   }
   
   footer .install .row img {
-    border: 1px solid #088178;
+    border: 1px solid blue;
     border-radius: 6px;
   }
   
@@ -220,7 +225,7 @@ footer {
   
   footer .follow i:hover,
   footer a:hover {
-    color: #088178;
+    color: blue;
   }
   
   footer .copyright {
@@ -246,11 +251,11 @@ footer {
     padding-bottom: 15px;
   }
   #hero h1 {
-    color: #088178;
+    color: blue;
   }
   #hero button {
     background-color: transparent;
-    color: #088178;
+    color: blue;
     border: 0;
     padding: 14px 80px 14px 65px;
     background-repeat: no-repeat;
@@ -272,7 +277,7 @@ footer {
     text-align: center;
     padding: 25px 15px;
     box-shadow: 20px 20px 34px rgba(0, 0, 0, 0.03);
-    border: 1px solid #cce7d0;
+    border: 1px solid lightblue;
     border-radius: 4px;
     margin: 15px 0;
   }
@@ -328,6 +333,7 @@ footer {
   min-width: 250px;
   padding: 10px 12px;
   border: 1px solid #cce7d0;
+  border: 1px solid lightblue;
   border-radius: 25px;
   cursor: pointer;
   box-shadow: 20px 20px 30px rgba(0, 0, 0, 0.02);
@@ -348,7 +354,7 @@ footer {
   padding: 10px 0;
 }
 #product1 .des span {
-  color: #606063;
+  color: black;
   font-size: 12px;
 }
 #product1 .des h5 {
@@ -361,16 +367,16 @@ footer {
   padding-top: 7px;
   font-size: 15px;
   font-weight: 700;
-  color: #088178;
+  color: blue;
 }
 #product1 .pro .cart {
   width: 40px;
   height: 40px;
   line-height: 40px;
   border-radius: 50px;
-  background-color: #e8f6ea;
+  background-color: lightblue;
   font-weight: 500;
-  color: #088178;
+  color: blue;
   border: 1px solid #cce7d0;
   position: absolute;
   bottom: 20px;
@@ -384,7 +390,6 @@ footer {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    /* background-image: url("img/banner/b2.jpg"); */
     width: 100%;
     height: 40vh;
     background-size: cover;
@@ -541,7 +546,7 @@ footer {
   width: 70px;
 }
 #cart table thead {
-  border: 1px solid #e2e9e1;
+  border: 1px solid lightblue;
   border-left: none;
   border-right: none;
 }
@@ -567,7 +572,7 @@ footer {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  border: 1px solid #e2e9e1;
+  border: 1px solid lightblue;
   border-left: none;
   border-right: none;
   border-bottom: none;
@@ -577,13 +582,13 @@ footer {
   padding-bottom: 15px;
 }
 #subtotal button {
-  background-color: #088178;
+  background-color: blue;
   padding: 12px 20px;
 }
 #subtotal {
   width: 50%;
   margin-bottom: 30px;
-  border: 1px solid #e2e9e1;
+  border: 1px solid lightblue;
   padding: 30px;
 }
 #subtotal table {
@@ -593,13 +598,13 @@ footer {
 }
 #subtotal table td {
   width: 50%;
-  border: 1px solid #e2e9e1;
+  border: 1px solid lightblue;
   padding: 10px;
   font-size: 13px;
 }
 .fa-minus-circle,
 .fa-plus-circle {
-  color: #088178;
+  color: blue;
   padding: 10px;
 }
 .update-cart:hover {
@@ -776,7 +781,6 @@ footer {
   }
   #pagination a {
     text-decoration: none;
-    background-color: #088178;
     padding: 15px 20px;
     border-radius: 4px;
     color: #fff;
@@ -865,7 +869,7 @@ footer {
       right: -300px;
       height: 100vh;
       width: 300px;
-      background-color: #e3e6f3;
+      background-color: lightblue;
       box-shadow: 0 40px 60px rgba(0, 0, 0, 0.1);
       padding: 80px 0 0 10px;
       transition: 0.3s; 

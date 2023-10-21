@@ -64,7 +64,7 @@
 <body>
     <!-- Header Section -->
     <section id="header">
-        <a href="{% url 'home' %}"><img src="{% static 'images/logo.png' %}" alt="logo" class="logo" /></a>
+        <a href="{% url 'home' %}"><img src="{% static 'images/basket.png' %}" alt="logo" class="logo" /></a>
         <div>
           <!-- Unordered list with navigation bar and links  -->
           <ul id="navbar">
@@ -77,8 +77,8 @@
               <li><a href="#">{{ user.username }}</a></li>
               <li><a href="{% url 'signout' %}" style="color: red;">Sign Out</a></li>
             {% else %}
-              <li><a href="{% url 'signin' %}" style="color: #088178;">Sign In</a></li>
-              <li><a href="{% url 'signup' %}" style="color: #088178;">Sign Up</a></li>
+              <li><a href="{% url 'signin' %}" style="color: purple;">Sign In</a></li>
+              <li><a href="{% url 'signup' %}" style="color: purple;">Sign Up</a></li>
             {% endif %}
             <div class="cart-container">
               <li><a href="{% url 'cart' %}" id="lg-bag"><i class="far fa-shopping-bag cart-icon"></i></a>
@@ -111,7 +111,7 @@
     <footer class="section-p1">
         <!-- Logo and address div -->
         <div class="col">
-          <img class="logo" src="{% static 'images/logo.png' %}" alt="logo" />
+          <img class="logo" src="{% static 'images/basket.png' %}" alt="logo" />
           <h4>Contact</h4>
           <p>
             <strong> Address: </strong>562 Wellington Road, Street 32, San
