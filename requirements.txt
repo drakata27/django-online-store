@@ -5,3 +5,4 @@ six==1.16.0
 sqlparse==0.4.3
 tzdata==2022.7
 stripe==2.64.0
+python-dotenv==0.19.0
