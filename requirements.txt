@@ -9,7 +9,6 @@ certifi==2023.7.22
 cffi==1.15.1
 channels==4.0.0
 charset-normalizer==3.2.0
-command-not-found==0.3
 constantly==15.1.0
 cryptography==41.0.4
 daphne==4.0.0
