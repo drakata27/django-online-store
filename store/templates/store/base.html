@@ -72,14 +72,6 @@
             <li><a href="{% url 'shop' %}">Shop</a></li>
             <li><a href="{% url 'about' %}">About</a></li>
             <li><a href="{% url 'contact' %}">Contact</a></li>
-            
-            {% if user.is_authenticated %}
-              <li><a href="#">{{ user.username }}</a></li>
-              <li><a href="{% url 'signout' %}" style="color: red;">Sign Out</a></li>
-            {% else %}
-              <li><a href="{% url 'signin' %}" style="color: purple;">Sign In</a></li>
-              <li><a href="{% url 'signup' %}" style="color: purple;">Sign Up</a></li>
-            {% endif %}
             <div class="cart-container">
               <li><a href="{% url 'cart' %}" id="lg-bag"><i class="far fa-shopping-bag cart-icon"></i></a>
                 <p id="cart-total">{{cart_items}}</p>
@@ -148,13 +140,7 @@
   
         <!-- My Account div -->
         <div class="col">
-          <h4>My Account</h4>
-          {% if user.is_authenticated %}
-            <a href="{% url 'signout' %}">Sign Out</a>
-          {% else %}
-            <a href="{% url 'signin' %}">Sign In</a>
-            <a href="{% url 'signup' %}">Sign Up</a>
-          {% endif %}
+          <h4>Account</h4>
           <a href="{% url 'cart'%}">View Cart</a>
           <a href="#">My Wishlist</a>
           <a href="#">Help</a>

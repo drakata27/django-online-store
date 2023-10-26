@@ -44,6 +44,10 @@ INSTALLED_APPS = [
 
     # Apps
     'store',
+    
+    #AWS
+    'storages',
+
 ]
 
 MIDDLEWARE = [
@@ -79,13 +83,6 @@ WSGI_APPLICATION = 'django_online_store.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
 
 DATABASES = {
     'default': {
@@ -133,13 +130,23 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = '/static/'
+# AWS Settings
+AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY_ID = os.getenv('AWS_SECRET_ACCESS_KEY_ID')
 
-STATICFILES_DIRS=[
-    os.path.join(BASE_DIR, 'static')
-]
+AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_STORAGE_BUCKET_NAME')
 
-MEDIA_URL = '/images/products/'
+DEFAULT_FILE_STORAGE = os.getenv('DEFAULT_FILE_STORAGE')
+
+STATICFILES_STORAGE = os.getenv('STATICFILES_STORAGE')
+
+AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+
+STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/static/'
+# STATIC_URL = '/static/'
+
+MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/images/products/'
+
 MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images/products')
 
 # Default primary key field type
@@ -154,3 +161,5 @@ STRIPE_WEBHOOK_KEY = os.getenv('STRIPE_TEST_WEBHOOK')
 
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
+
+
