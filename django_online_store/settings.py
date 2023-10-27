@@ -27,7 +27,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-a^cj)t32cii=$0xgl(+2z4dvmb06(=@%!ysa(qahz&i!l0+pf)'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['.vercel.app', '127.0.0.1']
 
@@ -143,7 +143,6 @@ STATICFILES_STORAGE = os.getenv('STATICFILES_STORAGE')
 AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
 
 STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/static/'
-# STATIC_URL = '/static/'
 
 MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/images/products/'
 
