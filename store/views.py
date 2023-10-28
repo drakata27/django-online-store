@@ -9,7 +9,6 @@ import stripe
 from django.conf import settings
 from dotenv import load_dotenv
 from .forms import *
-from django.contrib.auth import login
 import os
 
 load_dotenv()
