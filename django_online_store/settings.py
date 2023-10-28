@@ -154,9 +154,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images/products')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Stripe Settings
-STRIPE_PUBLIC_KEY = os.getenv('STRIPE_TEST_PUBLIC')
-STRIPE_SECRET_KEY = os.getenv('STRIPE_TEST_SECRET')
-STRIPE_WEBHOOK_KEY = os.getenv('STRIPE_TEST_WEBHOOK')
+STRIPE_PUBLIC_KEY = os.environ.get('STRIPE_TEST_PUBLIC')
+STRIPE_SECRET_KEY = os.environ.get('STRIPE_TEST_SECRET')
+STRIPE_WEBHOOK_KEY = os.environ.get('STRIPE_TEST_WEBHOOK')
 
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'

@@ -13,6 +13,7 @@ from django.contrib.auth import login
 import os
 
 load_dotenv()
+
 stripe.api_key=settings.STRIPE_SECRET_KEY
 endpoint_secret=settings.STRIPE_WEBHOOK_KEY
 
