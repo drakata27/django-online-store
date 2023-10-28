@@ -101,7 +101,7 @@ def contact(request):
     return render(request, 'store/contact.html', context)
 
 def checkout_session(request):
-    DOMAIN = 'http://' + os.getenv('HOST_AND_PORT') + '/'
+    DOMAIN = 'https://django-online-store.vercel.app/'
     line_items = []
     
     if request.user.is_authenticated:
