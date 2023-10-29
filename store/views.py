@@ -123,7 +123,6 @@ def checkout_session(request):
             line_items=line_items,
             mode='payment',
             success_url=DOMAIN + '/thank-you',
-            # success_url=DOMAIN,
             cancel_url=DOMAIN + '/cart',
             shipping_address_collection={
                 'allowed_countries': ['GB','BG'],
