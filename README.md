@@ -1,5 +1,5 @@
 # Django Online Store
-This is a commerce website created in the Django framework with Python, JavaScript, HTML and CSS. Stripe handles payments. You can check it out here: https://django-online-store.vercel.app/
+This is an ecommerce website created in the Django framework with Python, JavaScript, HTML and CSS. Stripe handles payments. You can check it out here: https://django-online-store.vercel.app/
 <img src="https://github.com/drakata27/django-online-store/assets/108131465/7eae7f01-6090-4bd8-81a1-1ab2c6099e32" alt="Home page" >
 <img src="https://github.com/drakata27/django-online-store/assets/108131465/74494837-64b5-4f40-ad4d-663a4057c3a6" alt="Home page products" >
 
